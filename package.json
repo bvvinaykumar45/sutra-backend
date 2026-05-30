@@ -1,0 +1,20 @@
+{
+  "name": "sutra-backend",
+  "version": "1.0.0",
+  "description": "A project management application for beginners",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "backend",
+    "RESTful",
+    "API",
+    "sutra",
+    "project",
+    "management"
+  ],
+  "author": "venkata vinay kumar b",
+  "license": "ISC"
+}
