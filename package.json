@@ -16,5 +16,8 @@
     "management"
   ],
   "author": "venkata vinay kumar b",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "3.8.3"
+  }
 }

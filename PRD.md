@@ -13,6 +13,7 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 ---
 
 ### 2. Target Users
+
 - **Project Administrators:** Create and manage projects, assign roles, oversee all project activities
 - **Project Admins:** Manage tasks and project content within assigned projects
 - **Team Members:** View projects, update task completion status, access project information
@@ -22,6 +23,7 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 ### 3. Core Features
 
 #### 3.1 User Authentication & Authorization
+
 - **User Registration:** Account creation with email verification
 - **User Login:** Secure authentication with JWT tokens
 - **Password Management:** Change password, forgot/reset password functionality
@@ -30,19 +32,22 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **Role-Based Access Control:** Three-tier permission system (Admim, Project Admin, Member)
 
 #### 3.2 Project Management
+
 - **Project Creation:** Create new projects with name and description
 - **Project Listing:** View all projects user has access to with member count
 - **Project Details:** Access individual project information
 - **Project Updates:** Modifies project information (Admin only)
-- **Project Deletion:** Remove projects (Admin only) 
+- **Project Deletion:** Remove projects (Admin only)
 
 #### 3.3 Team Member Management
+
 - **Member Addition:** Invite users to projects via email
 - **Member Listing:** View all project team members
 - **Role Management:** Update member roles within projects (Admin only)
 - **Member Removal:** Remove team members from projects (Admin only)
 
 #### 3.4 Task Mangement
+
 - **Task Creation:** Create tasks with title, description, and assignee
 - **Task Listing:** View all tasks within a project
 - **Task Details:** Access individual task information.
@@ -53,12 +58,14 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **Status Tracking:** Three-state status system (Todo, In Progress, Done)
 
 #### 3.5 Subtask Management
+
 - **Subtask Creation:** Add subtasks to existing tasks
 - **Subtask Updates:** Modify subtasks details and completion status
 - **Subtask Deletion:** Remove subtasks (Admin/ Project Admin only)
 - **Member Completion:** Allow members to mark subtasks as complete
 
 #### 3.6 Project Notes
+
 - **Note Creation:** Add notes to projects (Admin only)
 - **Note Listing:** View all project notes
 - **Note Details:** Access individual note content
@@ -66,6 +73,7 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **Note Deletion:** Remove notes (Admin only)
 
 #### 3.7 System Health
+
 - **Health Check:** API endpoint for system status monitoring
 
 ---
@@ -120,17 +128,17 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 
 #### 4.2 Permission Matrix
 
-| Feature                     | Admin   | Project Admin | Member  |
-| -----------------------     | ------- | ------------- | ------- |
-| Create Project              | ✅      | ❌            |  ❌      |
-| Update/Delete Project       | ✅      | ❌            |  ❌      |
-| Manage Project Members      | ✅      | ❌            |  ❌      |
-| Create/Update/Delete Tasks  | ✅      | ✅            |  ❌      |
-| View Tasks                  | ✅      | ✅            |  ✅      |
-| Update Subtasks Status      | ✅      | ✅            |  ✅      |
-| Create/Delete Subtasks      | ✅      | ✅            |  ❌      |
-| Create/Update/Delete Notess | ✅      | ❌            |  ❌      |
-| View Notes                  | ✅      | ✅            |  ✅      |
+| Feature                     | Admin | Project Admin | Member |
+| --------------------------- | ----- | ------------- | ------ |
+| Create Project              | ✅    | ❌            | ❌     |
+| Update/Delete Project       | ✅    | ❌            | ❌     |
+| Manage Project Members      | ✅    | ❌            | ❌     |
+| Create/Update/Delete Tasks  | ✅    | ✅            | ❌     |
+| View Tasks                  | ✅    | ✅            | ✅     |
+| Update Subtasks Status      | ✅    | ✅            | ✅     |
+| Create/Delete Subtasks      | ✅    | ✅            | ❌     |
+| Create/Update/Delete Notess | ✅    | ❌            | ❌     |
+| View Notes                  | ✅    | ✅            | ✅     |
 
 #### 4.3 Data Models
 
@@ -178,5 +186,3 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - File attachment capability for enhanced collaboration
 - Email notificaton system for user verification and password reset
 - Comprehensive API documentation through endpoint structure
-
-
