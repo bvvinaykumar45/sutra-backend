@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [
     "backend",
@@ -14,10 +15,11 @@
     "sutra",
     "project",
     "management"
-  ],
+],
   "author": "venkata vinay kumar b",
   "license": "ISC",
   "devDependencies": {
+    "nodemon": "^3.1.14",
     "prettier": "3.8.3"
   }
 }
