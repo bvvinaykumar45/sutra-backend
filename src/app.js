@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import healthCheckRouter from "./routes/health-check.routes.js";
+
 const app = express();
 
 // Basic configurations
@@ -17,6 +19,9 @@ app.use(
     allowedHeaders: ["Authorization", "Content-Type"],
   }),
 );
+
+// Routes
+app.use("/api/v1/healthcheck", healthCheckRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Sutra Backend");
