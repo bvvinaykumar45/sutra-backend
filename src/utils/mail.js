@@ -20,7 +20,7 @@ const mailGenerator = new Mailgen({
   },
 });
 
-const senEmail = async (options) => {
+const sendEmail = async (options) => {
   const plainTextEmail = mailGenerator.generatePlaintext(
     options.mailgenContent,
   );
