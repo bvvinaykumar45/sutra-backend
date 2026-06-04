@@ -3,6 +3,7 @@ import cors from "cors";
 
 import healthCheckRouter from "./routes/health-check.route.js";
 import authRouter from "./routes/auth.routes.js";
+import { ApiError } from "./utils/api-error.js";
 
 const app = express();
 
@@ -27,6 +28,22 @@ app.use("/api/v1/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Sutra Backend");
+});
+
+app.use((err, req, res, next) => {
+  console.error({
+    error: err.message,
+    errors: err.errors,
+    stack: err.stack,
+  });
+
+  return res.status(err.statusCode || 500).json(
+    err instanceof ApiError
+      ? err
+      : {
+          message: "Something went wrong",
+        },
+  );
 });
 
 export default app;
