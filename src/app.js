@@ -37,13 +37,11 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 
-  return res.status(err.statusCode || 500).json(
-    err instanceof ApiError
-      ? err
-      : {
-          message: "Something went wrong",
-        },
-  );
+  if (err.statusCode < 500)
+    return res
+      .status(err.statusCode)
+      .json(new ApiError(err.statusCode, err.message, [], err.stack));
+  return res.status(500).json({ message: "Something went wrong" });
 });
 
 export default app;
