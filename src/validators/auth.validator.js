@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const userRegisterValidator = (req, res, next) => {
+export const userRegisterValidator = () => {
   return [
     body("userName")
       .trim()
@@ -35,5 +35,17 @@ export const userRegisterValidator = (req, res, next) => {
         "password must contain atleast one lowercase, one uppercase, one symbol and must be atleast 8 characters long",
       ),
     body("fullName").trim().optional(),
+  ];
+};
+
+export const userLoginValidator = () => {
+  return [
+    body("email")
+      .notEmpty()
+      .withMessage("email is required")
+      .bail()
+      .isEmail()
+      .withMessage("email is invalid"),
+    body("password").notEmpty().withMessage("password is required"),
   ];
 };

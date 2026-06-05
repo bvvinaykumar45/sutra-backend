@@ -79,10 +79,6 @@ const registerUser = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || email !== "") {
-    throw new ApiError(400, "email is required");
-  }
-
   const user = await User.findOne({ email });
   if (!user) {
     throw new ApiError(404, "User does not exists!");
@@ -94,7 +90,7 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(400, "invalid credentials");
   }
 
-  const { accessToken, refereshToken } = await generateAccessAndRefreshTokens(
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     user._id,
   );
   const loggedInUser = await User.findById(user._id).select(
@@ -109,7 +105,7 @@ const login = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .cookie("access-token", accessToken, cookieOptions)
-    .cookie("refresh-token", refereshToken, cookieOptions)
+    .cookie("refresh-token", refreshToken, cookieOptions)
     .json(
       new ApiResponse(
         200,

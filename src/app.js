@@ -42,7 +42,14 @@ app.use((err, req, res, next) => {
   if (err.statusCode < 500)
     return res
       .status(err.statusCode)
-      .json(new ApiError(err.statusCode, err.message, [], err.stack));
+      .json(
+        new ApiError(
+          err.statusCode,
+          err.message,
+          err.errors?.length !== 0 ? err.errors : [],
+          err.stack,
+        ),
+      );
   return res.status(500).json({ message: "Something went wrong" });
 });
 
