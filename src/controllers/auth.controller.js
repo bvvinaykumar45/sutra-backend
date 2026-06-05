@@ -10,7 +10,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    user.refereshToken = refreshToken;
+    user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
   } catch (error) {
@@ -94,7 +94,7 @@ const login = asyncHandler(async (req, res) => {
     user._id,
   );
   const loggedInUser = await User.findById(user._id).select(
-    "_id userName email refreshToken",
+    "_id userName email",
   );
   const cookieOptions = {
     httpOnly: true,
