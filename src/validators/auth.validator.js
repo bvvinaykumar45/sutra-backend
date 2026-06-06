@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 export const userRegisterValidator = () => {
   return [
@@ -47,5 +47,16 @@ export const userLoginValidator = () => {
       .isEmail()
       .withMessage("email is invalid"),
     body("password").notEmpty().withMessage("password is required"),
+  ];
+};
+
+export const verifyEmailValidator = () => {
+  return [
+    param("verificationToken")
+      .trim()
+      .notEmpty()
+      .withMessage("verificationToken is required")
+      .isHexadecimal()
+      .withMessage("Token is invalid"),
   ];
 };
