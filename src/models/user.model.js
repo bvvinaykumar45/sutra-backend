@@ -104,16 +104,16 @@ userSchema.methods.generateRefreshToken = function () {
 };
 
 userSchema.methods.generateTemporaryToken = function () {
-  const unhasedToken = crypto.randomBytes(20).toString("hex");
+  const unhashedToken = crypto.randomBytes(20).toString("hex");
 
   const hashedToken = crypto
     .createHash("sha256")
-    .update(unhasedToken)
+    .update(unhashedToken)
     .digest("hex");
 
   const tokenExpiry = Date.now() + 20 * 60 * 1000; // 20 mins
 
-  return { unhasedToken, hashedToken, tokenExpiry };
+  return { unhashedToken, hashedToken, tokenExpiry };
 };
 
 export const User = mongoose.model("User", userSchema);

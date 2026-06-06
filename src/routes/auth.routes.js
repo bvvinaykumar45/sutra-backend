@@ -12,6 +12,7 @@ import {
   login,
   logoutUser,
   registerUser,
+  resendEmailVerification,
   verifyEmail,
 } from "../controllers/auth.controller.js";
 
@@ -26,5 +27,8 @@ router
 // secured routes
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
+router
+  .route("/resend-email-verification")
+  .post(verifyJWT, resendEmailVerification);
 
 export default router;

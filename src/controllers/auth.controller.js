@@ -153,7 +153,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 const verifyEmail = asyncHandler(async (req, res) => {
   const { verificationToken } = req.params;
 
-  let hashedToken = crypto
+  const hashedToken = crypto
     .createHash("sha256")
     .update(verificationToken)
     .digest("hex");
@@ -183,4 +183,46 @@ const verifyEmail = asyncHandler(async (req, res) => {
   );
 });
 
-export { registerUser, login, logoutUser, getCurrentUser, verifyEmail };
+const resendEmailVerification = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user.isEmailVerified) {
+    throw new ApiError(409, "Email is already verified");
+  }
+
+  const { unhashedToken, hashedToken, tokenExpiry } =
+    user.generateTemporaryToken();
+
+  user.emailVerificationToken = hashedToken;
+  user.emailVerificationExpiry = tokenExpiry;
+
+  await user.save();
+
+  await sendEmail({
+    email: user?.email,
+    subject: "Please verify your email",
+    mailgenContent: emailVerificationContent(
+      user.userName,
+      `${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unhashedToken}`,
+    ),
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Verification mail has been sent to your registered email",
+      ),
+    );
+});
+
+export {
+  registerUser,
+  login,
+  logoutUser,
+  getCurrentUser,
+  verifyEmail,
+  resendEmailVerification,
+};
