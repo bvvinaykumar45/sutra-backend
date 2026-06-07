@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
   forgotPasswordValidator,
+  resetForgotPasswordValidator,
   userLoginValidator,
   userRegisterValidator,
   verifyEmailValidator,
@@ -16,6 +17,7 @@ import {
   refreshAccessToken,
   registerUser,
   resendEmailVerification,
+  resetForgotPassword,
   verifyEmail,
 } from "../controllers/auth.controller.js";
 
@@ -25,6 +27,9 @@ const router = Router();
 router.route("/register").post(userRegisterValidator(), validate, registerUser);
 router.route("/login").post(userLoginValidator(), validate, login);
 router.route("/refresh-token").post(refreshAccessToken);
+router
+  .route("/reset-password/:resetToken")
+  .post(resetForgotPasswordValidator(), validate, resetForgotPassword);
 router
   .route("/forgot-password")
   .post(forgotPasswordValidator(), validate, forgotPassword);
