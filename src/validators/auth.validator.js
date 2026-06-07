@@ -72,3 +72,38 @@ export const forgotPasswordValidator = () => {
       .withMessage("inavalid email id"),
   ];
 };
+
+export const resetForgotPasswordValidator = () => {
+  return [
+    param("resetToken")
+      .trim()
+      .notEmpty()
+      .withMessage("resetToken is required")
+      .isHexadecimal()
+      .withMessage("invalid token"),
+    body("password")
+      .trim()
+      .notEmpty()
+      .withMessage("password is required")
+      .bail()
+      .isStrongPassword({
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage(
+        "password must contain atleast one lowercase, one uppercase, one symbol and must be atleast 8 characters long",
+      ),
+    body("confirmPassword")
+      .trim()
+      .notEmpty()
+      .withMessage("cofirmPassword is required")
+      .bail()
+      .custom(
+        (confirmPassword, { req }) => confirmPassword === req.body.password,
+      )
+      .withMessage("confirmPassword must match password"),
+  ];
+};
