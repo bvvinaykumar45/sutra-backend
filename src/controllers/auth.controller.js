@@ -1,10 +1,15 @@
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
+
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
-import { emailVerificationContent, sendEmail } from "../utils/mail.js";
+import {
+  emailVerificationContent,
+  forgotPasswordContent,
+  sendEmail,
+} from "../utils/mail.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -265,7 +270,43 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 });
 
+const forgotPassword = asyncHandler(async (req, res) => {
+  const email = req.body.email;
+
+  const user = await User.findOne({ email }).select("_id userName email");
+
+  if (!user) {
+    throw new ApiError(404, "User does not exists!");
+  }
+
+  const { hashedToken, unhashedToken, tokenExpiry } =
+    user.generateTemporaryToken();
+  user.forgotPasswordToken = hashedToken;
+  user.forgotPasswordExpiry = tokenExpiry;
+  await user.save();
+
+  await sendEmail({
+    email: user?.email,
+    subject: "Password Reset Email",
+    mailgenContent: forgotPasswordContent(
+      user.userName,
+      `${req.protocol}://${req.hostname}:5137/forgot-password/${unhashedToken}`,
+    ),
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Reset Password Email has been sent successfully.",
+      ),
+    );
+});
+
 export {
+  forgotPassword,
   getCurrentUser,
   login,
   logoutUser,

@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  forgotPasswordValidator,
   userLoginValidator,
   userRegisterValidator,
   verifyEmailValidator,
@@ -8,6 +9,7 @@ import {
 import { validate } from "../middlewares/validator.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
+  forgotPassword,
   getCurrentUser,
   login,
   logoutUser,
@@ -23,6 +25,9 @@ const router = Router();
 router.route("/register").post(userRegisterValidator(), validate, registerUser);
 router.route("/login").post(userLoginValidator(), validate, login);
 router.route("/refresh-token").post(refreshAccessToken);
+router
+  .route("/forgot-password")
+  .post(forgotPasswordValidator(), validate, forgotPassword);
 router
   .route("/verify-email/:verificationToken")
   .post(verifyEmailValidator(), validate, verifyEmail);
