@@ -60,3 +60,15 @@ export const verifyEmailValidator = () => {
       .withMessage("Token is invalid"),
   ];
 };
+
+export const forgotPasswordValidator = () => {
+  return [
+    body("email")
+      .trim()
+      .notEmpty()
+      .withMessage("email is required")
+      .bail()
+      .isEmail()
+      .withMessage("inavalid email id"),
+  ];
+};
