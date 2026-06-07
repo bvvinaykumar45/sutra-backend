@@ -11,6 +11,7 @@ import {
   getCurrentUser,
   login,
   logoutUser,
+  refreshAccessToken,
   registerUser,
   resendEmailVerification,
   verifyEmail,
@@ -18,8 +19,10 @@ import {
 
 const router = Router();
 
+// unsecured routes
 router.route("/register").post(userRegisterValidator(), validate, registerUser);
 router.route("/login").post(userLoginValidator(), validate, login);
+router.route("/refresh-token").post(refreshAccessToken);
 router
   .route("/verify-email/:verificationToken")
   .post(verifyEmailValidator(), validate, verifyEmail);

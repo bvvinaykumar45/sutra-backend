@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
@@ -218,11 +219,58 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     );
 });
 
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const userRefreshToken =
+    req.cookies?.["refresh-token"] ||
+    req.body?.["refresh-token"] ||
+    req.header("Authorization").split(" ")[1];
+
+  if (!userRefreshToken) {
+    throw new ApiError(400, "Refresh Token is required");
+  }
+
+  let payload;
+  try {
+    payload = jwt.verify(userRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+  } catch (error) {
+    throw new ApiError(401, "Invalid Refresh Token");
+  }
+
+  const user = await User.findOne({ _id: payload._id }).select(
+    "_id userName email refreshToken",
+  );
+
+  if (!user.refreshToken) {
+    throw new ApiError(401, "Invalid Refresh Token");
+  }
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    user._id,
+  );
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+  };
+
+  return res
+    .status(200)
+    .cookie("access-token", accessToken, cookieOptions)
+    .cookie("refresh-token", refreshToken, cookieOptions)
+    .json(
+      new ApiResponse(200, { user }, "Access Token is refreshed successfully"),
+    );
+});
+
 export {
-  registerUser,
+  getCurrentUser,
   login,
   logoutUser,
-  getCurrentUser,
-  verifyEmail,
+  refreshAccessToken,
+  registerUser,
   resendEmailVerification,
+  verifyEmail,
 };
