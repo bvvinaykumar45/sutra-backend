@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  changePasswordValidator,
   forgotPasswordValidator,
   resetForgotPasswordValidator,
   userLoginValidator,
@@ -10,6 +11,7 @@ import {
 import { validate } from "../middlewares/validator.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
+  changeCurrentPassword,
   forgotPassword,
   getCurrentUser,
   login,
@@ -40,6 +42,9 @@ router
 // secured routes
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
+router
+  .route("/change-password")
+  .post(verifyJWT, changePasswordValidator(), validate, changeCurrentPassword);
 router
   .route("/resend-email-verification")
   .post(verifyJWT, resendEmailVerification);
