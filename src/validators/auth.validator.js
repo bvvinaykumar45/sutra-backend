@@ -107,3 +107,38 @@ export const resetForgotPasswordValidator = () => {
       .withMessage("confirmPassword must match password"),
   ];
 };
+
+export const changePasswordValidator = () => {
+  return [
+    body("oldPassword")
+      .trim()
+      .notEmpty()
+      .withMessage("oldPassword is required"),
+    body("newPassword")
+      .trim()
+      .notEmpty()
+      .withMessage("newPassword is required")
+      .bail()
+      .isStrongPassword({
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage(
+        "password must contain atleast one lowercase, one uppercase, one symbol and must be atleast 8 characters long",
+      )
+      .custom((newPassword, { req }) => newPassword !== req.body.oldPassword)
+      .withMessage("New password cannot be same as Old password"),
+    body("confirmPassword")
+      .trim()
+      .notEmpty()
+      .withMessage("cofirmPassword is required")
+      .bail()
+      .custom(
+        (confirmPassword, { req }) => confirmPassword === req.body.newPassword,
+      )
+      .withMessage("confirmPassword must match newPassword"),
+  ];
+};
