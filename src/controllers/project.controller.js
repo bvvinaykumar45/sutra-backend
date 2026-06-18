@@ -29,3 +29,37 @@ const createProject = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, project, "Project created successfully."));
 });
+
+const updateProject = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { projectId } = req.params;
+  const { title, description } = req.body;
+
+  const project = await Project.findByIdAndUpdate(
+    projectId,
+    {
+      title,
+      description,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  if (!project) {
+    throw new ApiError(404, "Project does not exists!");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { id: project._id },
+        "Project is successfully updated.",
+      ),
+    );
+});
+
+export { createProject, updateProject };
