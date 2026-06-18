@@ -10,8 +10,5 @@ export const validate = (req, res, next) => {
     .array()
     .map((err) => ({ [err.path]: err.msg }));
 
-  console.error({
-    errors: errors.array(),
-  });
   throw new ApiError(422, "Invalid Request Data", extractedErrors);
 };
