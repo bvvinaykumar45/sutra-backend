@@ -62,4 +62,25 @@ const updateProject = asyncHandler(async (req, res) => {
     );
 });
 
-export { createProject, updateProject };
+const deleteProject = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { projectId } = req.params;
+
+  const project = await Project.findByIdAndDelete(projectId);
+
+  if (!project) {
+    throw new ApiError(404, "Project does not exists!");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { id: project._id },
+        "Project is successfully deleted.",
+      ),
+    );
+});
+
+export { createProject, deleteProject, updateProject };

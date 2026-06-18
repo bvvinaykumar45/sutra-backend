@@ -51,3 +51,14 @@ export const updateProjectValidator = () => {
       .trim(),
   ];
 };
+
+export const deleteProjectValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("projectId is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+  ];
+};
