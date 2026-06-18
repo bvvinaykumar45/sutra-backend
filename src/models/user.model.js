@@ -57,6 +57,10 @@ const userSchema = new Schema(
     emailVerificationExpiry: {
       type: Date,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

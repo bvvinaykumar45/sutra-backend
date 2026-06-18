@@ -1,5 +1,8 @@
-import mongoose, { mongoosePopulatedDocumentMarker, Schema } from "mongoose";
-import { AvailableUserRoles, UserRoleEnum } from "../utils/constants.js";
+import mongoose, { Schema } from "mongoose";
+import {
+  AvailableProjectMemberRoles,
+  ProjectMemberRoleEnum,
+} from "../utils/constants.js";
 
 const projectMemberSchema = new Schema(
   {
@@ -15,8 +18,8 @@ const projectMemberSchema = new Schema(
     },
     role: {
       type: String,
-      enum: AvailableUserRoles,
-      default: UserRoleEnum.MEMBER,
+      enum: AvailableProjectMemberRoles,
+      default: ProjectMemberRoleEnum.MEMBER,
     },
   },
   {
