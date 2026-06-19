@@ -8,7 +8,7 @@ export const validate = (req, res, next) => {
 
   const extractedErrors = errors
     .array()
-    .map((err) => ({ [err.path]: err.msg }));
+    .map((err) => ({ [err.path || err.location || "request"]: err.msg }));
 
   throw new ApiError(422, "Invalid Request Data", extractedErrors);
 };

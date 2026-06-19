@@ -35,24 +35,23 @@ app.get("/", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const errors =
+    Array.isArray(err.errors) && err.errors.length > 0 ? err.errors : [];
+
   console.error({
     error: err.message,
-    errors: err.errors,
+    errors,
     stack: err.stack,
   });
 
-  if (err.statusCode < 500)
-    return res
-      .status(err.statusCode)
-      .json(
-        new ApiError(
-          err.statusCode,
-          err.message,
-          err.errors?.length !== 0 ? err.errors : [],
-          err.stack,
-        ),
-      );
-  return res.status(500).json({ message: "Something went wrong" });
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message: statusCode < 500 ? err.message : "Something went wrong",
+    errors,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+  });
 });
 
 export default app;
