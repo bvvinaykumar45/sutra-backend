@@ -11,6 +11,7 @@ import {
   createProject,
   deleteProject,
   getProjectById,
+  getProjects,
   updateProject,
 } from "../controllers/project.controller.js";
 import { checkForAdmin } from "../middlewares/admin-check.middleware.js";
@@ -21,6 +22,7 @@ router.use(verifyJWT);
 
 router
   .route("/")
+  .get(getProjects)
   .post(checkForAdmin, createProjectValidator(), validate, createProject);
 
 router

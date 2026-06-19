@@ -9,6 +9,137 @@ import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { ProjectMemberRoleEnum } from "../utils/constants.js";
 
+const getProjects = asyncHandler(async (req, res) => {
+  const user = req.user;
+
+  let projectMatch = {};
+
+  if (!user.isAdmin) {
+    const membershipDocuments = await ProjectMember.find({
+      userId: user._id,
+    }).select("projectId");
+    const projectIds = membershipDocuments.map((doc) => doc.projectId);
+
+    if (projectIds.length === 0) {
+      return res
+        .status(200)
+        .json(new ApiResponse(200, [], "Projects are fetched successfully."));
+    }
+
+    projectMatch._id = {
+      $in: projectIds,
+    };
+  }
+
+  const projects = await Project.aggregate([
+    {
+      $match: projectMatch,
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "createdBy",
+        foreignField: "_id",
+        as: "createdBy",
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              userName: 1,
+              fullName: 1,
+              avatar: 1,
+              email: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: "$createdBy",
+    },
+    {
+      $lookup: {
+        from: "projectmembers",
+        as: "membersStat",
+        let: {
+          creatorId: "$_id",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$projectId", "$$creatorId"],
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "projectmembers",
+        let: {
+          projectId: "$_id",
+          currentUserId: new mongoose.Types.ObjectId(user._id),
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ["$projectId", "$$projectId"],
+                  },
+                  {
+                    $eq: ["$userId", "$$currentUserId"],
+                  },
+                ],
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              role: 1,
+            },
+          },
+        ],
+        as: "currentUserRoleStat",
+      },
+    },
+    {
+      $addFields: {
+        numberOfMembers: {
+          $size: "$membersStat",
+        },
+        role: {
+          $ifNull: [
+            {
+              $first: "$currentUserRoleStat.role",
+            },
+            null,
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        membersStat: 0,
+        currentUserRoleStat: 0,
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, projects, "Projects are fetched successfully"));
+});
+
 const getProjectById = asyncHandler(async (req, res) => {
   const user = req.user;
   const { projectId } = req.params;
@@ -74,21 +205,13 @@ const getProjectById = asyncHandler(async (req, res) => {
               },
             },
           },
-          {
-            $count: "count",
-          },
         ],
       },
     },
     {
       $addFields: {
         numberOfMembers: {
-          $ifNull: [
-            {
-              $first: "$members.count",
-            },
-            0,
-          ],
+          $size: "$members",
         },
       },
     },
@@ -202,4 +325,10 @@ const deleteProject = asyncHandler(async (req, res) => {
   }
 });
 
-export { createProject, deleteProject, getProjectById, updateProject };
+export {
+  createProject,
+  deleteProject,
+  getProjectById,
+  getProjects,
+  updateProject,
+};
