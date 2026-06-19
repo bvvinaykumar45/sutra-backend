@@ -4,11 +4,13 @@ import { validate } from "../middlewares/validator.middleware.js";
 import {
   createProjectValidator,
   deleteProjectValidator,
+  getProjectByIdValidator,
   updateProjectValidator,
 } from "../validators/project.validator.js";
 import {
   createProject,
   deleteProject,
+  getProjectById,
   updateProject,
 } from "../controllers/project.controller.js";
 import { checkForAdmin } from "../middlewares/admin-check.middleware.js";
@@ -23,6 +25,7 @@ router
 
 router
   .route("/:projectId")
+  .get(getProjectByIdValidator(), validate, getProjectById)
   .patch(checkForAdmin, updateProjectValidator(), validate, updateProject)
   .delete(checkForAdmin, deleteProjectValidator(), validate, deleteProject);
 

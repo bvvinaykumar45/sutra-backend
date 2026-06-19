@@ -1,5 +1,16 @@
 import { body, param } from "express-validator";
 
+export const getProjectByIdValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("projectId is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+  ];
+};
+
 export const createProjectValidator = () => {
   return [
     body("title").trim().notEmpty().withMessage("title is required"),

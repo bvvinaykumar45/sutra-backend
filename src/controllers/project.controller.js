@@ -9,6 +9,103 @@ import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { ProjectMemberRoleEnum } from "../utils/constants.js";
 
+const getProjectById = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { projectId } = req.params;
+
+  if (!user.isAdmin) {
+    const member = await ProjectMember.findOne({
+      projectId,
+      userId: user._id,
+    });
+    if (!member) {
+      throw new ApiError(403, "You are not allowed to perform the task.");
+    }
+  }
+
+  const [project] = await Project.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(projectId),
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        as: "createdBy",
+        let: {
+          creatorId: "$createdBy",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$_id", "$$creatorId"],
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              userName: 1,
+              email: 1,
+              avatar: 1,
+              fullName: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: "$createdBy",
+    },
+    {
+      $lookup: {
+        from: "projectmembers",
+        as: "members",
+        let: {
+          currentProjectId: "$_id",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$projectId", "$$currentProjectId"],
+              },
+            },
+          },
+          {
+            $count: "count",
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        numberOfMembers: {
+          $ifNull: [
+            {
+              $first: "$members.count",
+            },
+            0,
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        members: 0,
+      },
+    },
+  ]);
+
+  if (!project) throw new ApiError(404, "Project does not exists!");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, project, "Project is fetched successfully."));
+});
+
 const createProject = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
   const user = req.user;
@@ -83,4 +180,4 @@ const deleteProject = asyncHandler(async (req, res) => {
     );
 });
 
-export { createProject, deleteProject, updateProject };
+export { createProject, deleteProject, getProjectById, updateProject };
