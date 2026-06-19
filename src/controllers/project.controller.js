@@ -163,21 +163,43 @@ const deleteProject = asyncHandler(async (req, res) => {
   const user = req.user;
   const { projectId } = req.params;
 
-  const project = await Project.findByIdAndDelete(projectId);
+  const session = await mongoose.startSession();
 
-  if (!project) {
-    throw new ApiError(404, "Project does not exists!");
-  }
+  try {
+    session.startTransaction();
+    const project = await Project.findById(projectId).session(session);
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        { id: project._id },
-        "Project is successfully deleted.",
-      ),
+    if (!project) {
+      throw new ApiError(404, "Project does not exists!");
+    }
+
+    await ProjectMember.deleteMany({ projectId }).session(session);
+    await Project.findByIdAndDelete(projectId).session(session);
+    await session.commitTransaction();
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { id: project._id },
+          "Project is successfully deleted.",
+        ),
+      );
+  } catch (error) {
+    await session.abortTransaction();
+
+    if (error instanceof ApiError) throw error;
+
+    throw new ApiError(
+      500,
+      "Error while delete project transaction.",
+      [],
+      error.stack,
     );
+  } finally {
+    session.endSession();
+  }
 });
 
 export { createProject, deleteProject, getProjectById, updateProject };
