@@ -125,3 +125,20 @@ export const updateMemberValidator = () => {
       .withMessage("Invalid role"),
   ];
 };
+
+export const deleteMemberValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("userId")
+      .trim()
+      .notEmpty()
+      .withMessage("userId is required")
+      .isMongoId()
+      .withMessage("Invalid user id"),
+  ];
+};

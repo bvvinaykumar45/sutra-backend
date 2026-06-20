@@ -467,10 +467,44 @@ const updateProjectMember = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Successfully updated project member"));
 });
 
+const deleteProjectMember = asyncHandler(async (req, res) => {
+  const { projectId, userId } = req.params;
+
+  const project = await Project.findById(projectId).select("_id");
+  if (!project) throw new ApiError(404, "Project does not exists!");
+
+  const user = await User.findById(userId).select("_id");
+  if (!user) throw new ApiError(404, "User does not exists!");
+
+  const deletedMember = await ProjectMember.findOneAndDelete(
+    {
+      projectId,
+      userId,
+    },
+    {
+      returnDocument: "after",
+    },
+  );
+
+  if (!deletedMember)
+    throw new ApiError(404, "Project Member does not exists!");
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { _id: deletedMember._id },
+        "Project Member deleted successfully",
+      ),
+    );
+});
+
 export {
   addMembersToProject,
   createProject,
   deleteProject,
+  deleteProjectMember,
   getProjectById,
   getProjectMembers,
   getProjects,

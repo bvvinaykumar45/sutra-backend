@@ -20,6 +20,7 @@ import {
   addMembersToProject,
   createProject,
   deleteProject,
+  deleteProjectMember,
   getProjectById,
   getProjectMembers,
   getProjects,
@@ -69,6 +70,12 @@ router
     updateMemberValidator(),
     validate,
     updateProjectMember,
+  )
+  .delete(
+    projectRoleCheck([ProjectMemberRoleEnum.PROJECT_ADMIN]),
+    deleteProjectValidator(),
+    validate,
+    deleteProjectMember,
   );
 
 export default router;
