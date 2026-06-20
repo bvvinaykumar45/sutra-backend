@@ -349,6 +349,11 @@ const getProjectMembers = asyncHandler(async (req, res) => {
       $unwind: "$user",
     },
     {
+      $addFields: {
+        "user.role": "$role",
+      },
+    },
+    {
       $group: {
         _id: "$projectId",
         members: { $push: "$user" },
