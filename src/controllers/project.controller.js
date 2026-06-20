@@ -316,10 +316,65 @@ const deleteProject = asyncHandler(async (req, res) => {
   }
 });
 
+const getProjectMembers = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { projectId } = req.params;
+
+  const [aggregateResult] = await ProjectMember.aggregate([
+    {
+      $match: {
+        projectId: new mongoose.Types.ObjectId(projectId),
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              userName: 1,
+              fullName: 1,
+              email: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: "$user",
+    },
+    {
+      $group: {
+        _id: "$projectId",
+        members: { $push: "$user" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+      },
+    },
+  ]);
+
+  const members = aggregateResult.members;
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, members, "Project Members fetched successfully"),
+    );
+});
+
 export {
   createProject,
   deleteProject,
   getProjectById,
+  getProjectMembers,
   getProjects,
   updateProject,
 };

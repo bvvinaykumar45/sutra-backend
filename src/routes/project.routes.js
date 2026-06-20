@@ -11,6 +11,7 @@ import {
   createProject,
   deleteProject,
   getProjectById,
+  getProjectMembers,
   getProjects,
   updateProject,
 } from "../controllers/project.controller.js";
@@ -39,5 +40,9 @@ router
   )
   .patch(checkForAdmin, updateProjectValidator(), validate, updateProject)
   .delete(checkForAdmin, deleteProjectValidator(), validate, deleteProject);
+
+router
+  .route("/:projectId/members")
+  .get(projectRoleCheck(AvailableProjectMemberRoles), getProjectMembers);
 
 export default router;
