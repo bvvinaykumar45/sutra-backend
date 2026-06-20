@@ -27,6 +27,17 @@ const projectMemberSchema = new Schema(
   },
 );
 
+projectMemberSchema.index(
+  {
+    projectId: 1,
+    userId: 1,
+  },
+  {
+    name: "project_id_user_id_unique_index",
+    unique: true,
+  },
+);
+
 export const ProjectMember = mongoose.model(
   "ProjectMember",
   projectMemberSchema,
