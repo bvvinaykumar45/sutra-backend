@@ -144,16 +144,6 @@ const getProjectById = asyncHandler(async (req, res) => {
   const user = req.user;
   const { projectId } = req.params;
 
-  if (!user.isAdmin) {
-    const member = await ProjectMember.findOne({
-      projectId,
-      userId: user._id,
-    });
-    if (!member) {
-      throw new ApiError(403, "You are not allowed to perform the task.");
-    }
-  }
-
   const [project] = await Project.aggregate([
     {
       $match: {
@@ -224,6 +214,7 @@ const getProjectById = asyncHandler(async (req, res) => {
 
   if (!project) throw new ApiError(404, "Project does not exists!");
 
+  project.role = user.role ?? null;
   return res
     .status(200)
     .json(new ApiResponse(200, project, "Project is fetched successfully."));

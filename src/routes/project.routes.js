@@ -14,7 +14,11 @@ import {
   getProjects,
   updateProject,
 } from "../controllers/project.controller.js";
-import { checkForAdmin } from "../middlewares/admin-check.middleware.js";
+import {
+  checkForAdmin,
+  projectRoleCheck,
+} from "../middlewares/role-check.middleware.js";
+import { AvailableProjectMemberRoles } from "../utils/constants.js";
 
 const router = new Router();
 
@@ -27,7 +31,12 @@ router
 
 router
   .route("/:projectId")
-  .get(getProjectByIdValidator(), validate, getProjectById)
+  .get(
+    getProjectByIdValidator(),
+    validate,
+    projectRoleCheck(AvailableProjectMemberRoles),
+    getProjectById,
+  )
   .patch(checkForAdmin, updateProjectValidator(), validate, updateProject)
   .delete(checkForAdmin, deleteProjectValidator(), validate, deleteProject);
 
