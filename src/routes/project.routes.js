@@ -12,6 +12,7 @@ import {
   createProjectValidator,
   deleteProjectValidator,
   getProjectByIdValidator,
+  updateMemberValidator,
   updateProjectValidator,
 } from "../validators/project.validator.js";
 
@@ -23,6 +24,7 @@ import {
   getProjectMembers,
   getProjects,
   updateProject,
+  updateProjectMember,
 } from "../controllers/project.controller.js";
 
 import {
@@ -58,6 +60,15 @@ router
     addMembersToProjectValidator(),
     validate,
     addMembersToProject,
+  );
+
+router
+  .route("/:projectId/members/:userId")
+  .patch(
+    projectRoleCheck([ProjectMemberRoleEnum.PROJECT_ADMIN]),
+    updateMemberValidator(),
+    validate,
+    updateProjectMember,
   );
 
 export default router;
