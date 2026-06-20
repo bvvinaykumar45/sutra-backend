@@ -1,13 +1,22 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validator.middleware.js";
+
 import {
+  checkForAdmin,
+  projectRoleCheck,
+} from "../middlewares/role-check.middleware.js";
+
+import {
+  addMembersToProjectValidator,
   createProjectValidator,
   deleteProjectValidator,
   getProjectByIdValidator,
   updateProjectValidator,
 } from "../validators/project.validator.js";
+
 import {
+  addMembersToProject,
   createProject,
   deleteProject,
   getProjectById,
@@ -15,11 +24,11 @@ import {
   getProjects,
   updateProject,
 } from "../controllers/project.controller.js";
+
 import {
-  checkForAdmin,
-  projectRoleCheck,
-} from "../middlewares/role-check.middleware.js";
-import { AvailableProjectMemberRoles } from "../utils/constants.js";
+  AvailableProjectMemberRoles,
+  ProjectMemberRoleEnum,
+} from "../utils/constants.js";
 
 const router = new Router();
 
@@ -43,6 +52,12 @@ router
 
 router
   .route("/:projectId/members")
-  .get(projectRoleCheck(AvailableProjectMemberRoles), getProjectMembers);
+  .get(projectRoleCheck(AvailableProjectMemberRoles), getProjectMembers)
+  .post(
+    projectRoleCheck([ProjectMemberRoleEnum.PROJECT_ADMIN]),
+    addMembersToProjectValidator(),
+    validate,
+    addMembersToProject,
+  );
 
 export default router;

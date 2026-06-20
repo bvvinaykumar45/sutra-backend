@@ -370,7 +370,68 @@ const getProjectMembers = asyncHandler(async (req, res) => {
     );
 });
 
+const addMembersToProject = asyncHandler(async (req, res) => {
+  const { members } = req.body;
+  const { projectId } = req.params;
+
+  // const user = await User.findById(userId);
+
+  // if(!user) throw new ApiError(404, "User does not exists!");
+
+  const project = await Project.findById(projectId).select("_id");
+
+  if (!project) throw new ApiError(404, "Project does not exists!");
+
+  const userIds = members.map((member) => member.userId);
+
+  const users = await User.find({
+    _id: {
+      $in: userIds,
+    },
+  }).select("_id");
+
+  if (users.length !== userIds.length)
+    throw new ApiError(404, "One or more users does not exists!");
+
+  const existingMembers = await ProjectMember.find({
+    projectId,
+    userId: {
+      $in: userIds,
+    },
+  }).select("userId");
+
+  if (existingMembers.length > 0) {
+    const existingMemberIds = existingMembers.map((member) =>
+      member.userId.toString(),
+    );
+    throw new ApiError(
+      409,
+      "One or more users are already a member",
+      existingMemberIds,
+    );
+  }
+
+  const membersToCreate = members.map((member) => ({
+    projectId,
+    userId: member.userId,
+    role: member.role,
+  }));
+
+  const createdMembers = await ProjectMember.insertMany(membersToCreate);
+
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        { members: createdMembers },
+        "Members added to project successfully",
+      ),
+    );
+});
+
 export {
+  addMembersToProject,
   createProject,
   deleteProject,
   getProjectById,

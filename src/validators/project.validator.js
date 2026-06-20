@@ -1,4 +1,5 @@
 import { body, param } from "express-validator";
+import { AvailableProjectMemberRoles } from "../utils/constants.js";
 
 export const getProjectByIdValidator = () => {
   return [
@@ -71,5 +72,33 @@ export const deleteProjectValidator = () => {
       .withMessage("projectId is required")
       .isMongoId()
       .withMessage("Invalid project id"),
+  ];
+};
+
+export const addMembersToProjectValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    body("members")
+      .exists({ values: "falsy" })
+      .withMessage("members array is required")
+      .isArray({ min: 1 })
+      .withMessage("members must be a non-empty array"),
+    body("members.*.userId")
+      .trim()
+      .notEmpty()
+      .withMessage("userId is required")
+      .isMongoId()
+      .withMessage("Invalid user id"),
+    body("members.*.role")
+      .trim()
+      .notEmpty()
+      .withMessage("role is required")
+      .isIn(AvailableProjectMemberRoles)
+      .withMessage("Invalid role"),
   ];
 };
