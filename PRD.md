@@ -100,11 +100,11 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **`GET /`** - List user projects (secured)
 - **`POST /`** - Create project (secured)
 - **`GET /:projectId`** - Get project details (secured, role-based)
-- **`PUT /:projectId`** - Update project (secured, Admin only)
+- **`PATCH /:projectId`** - Update project (secured, Admin only)
 - **`DELETE /:projectId`** - Delete project (secured, Admin only)
 - **`GET /:projectId/members`** - List project members (secured)
 - **`POST /:projectId/members`** - Add project member (secured, Admin only)
-- **`PUT /:projectId/members/:userId`** - Update member role (secured, Admin only)
+- **`PATCH /:projectId/members/:userId`** - Update member role (secured, Admin only)
 - **`DELETE /:projectId/members/:userId`** - Remove member (secured, Admin only)
 
 **Task Routes (`/api/v1/tasks`)**
@@ -132,7 +132,7 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 | --------------------------- | ----- | ------------- | ------ |
 | Create Project              | ✅    | ❌            | ❌     |
 | Update/Delete Project       | ✅    | ❌            | ❌     |
-| Manage Project Members      | ✅    | ❌            | ❌     |
+| Manage Project Members      | ✅    | ✅            | ❌     |
 | Create/Update/Delete Tasks  | ✅    | ✅            | ❌     |
 | View Tasks                  | ✅    | ✅            | ✅     |
 | Update Subtasks Status      | ✅    | ✅            | ✅     |
