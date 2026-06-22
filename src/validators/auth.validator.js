@@ -32,7 +32,7 @@ export const userRegisterValidator = () => {
         minSymbols: 1,
       })
       .withMessage(
-        "password must contain atleast one lowercase, one uppercase, one symbol and must be atleast 8 characters long",
+        "password must contain atleast one lowercase, one uppercase, one number, one symbol and must be atleast 8 characters long",
       ),
     body("fullName").trim().optional(),
   ];
@@ -41,6 +41,7 @@ export const userRegisterValidator = () => {
 export const userLoginValidator = () => {
   return [
     body("email")
+      .trim()
       .notEmpty()
       .withMessage("email is required")
       .bail()
@@ -94,7 +95,7 @@ export const resetForgotPasswordValidator = () => {
         minSymbols: 1,
       })
       .withMessage(
-        "password must contain atleast one lowercase, one uppercase, one symbol and must be atleast 8 characters long",
+        "password must contain atleast one lowercase, one uppercase, one number, one symbol and must be atleast 8 characters long",
       ),
     body("confirmPassword")
       .trim()
@@ -127,7 +128,7 @@ export const changePasswordValidator = () => {
         minSymbols: 1,
       })
       .withMessage(
-        "password must contain atleast one lowercase, one uppercase, one symbol and must be atleast 8 characters long",
+        "password must contain atleast one lowercase, one uppercase, one number, one symbol and must be atleast 8 characters long",
       )
       .custom((newPassword, { req }) => newPassword !== req.body.oldPassword)
       .withMessage("New password cannot be same as Old password"),
