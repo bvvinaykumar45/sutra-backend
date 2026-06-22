@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { AvailableTaskStatuses, TaskStatusEnum } from "../utils/constants";
+import { AvailableTaskStatuses, TaskStatusEnum } from "../utils/constants.js";
 
 const taskSchema = new Schema(
   {
@@ -10,21 +10,27 @@ const taskSchema = new Schema(
     },
     description: {
       type: String,
+      required: true,
     },
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
       required: true,
     },
-    assignedBy: {
+    createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    assignedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
     assignedTo: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      default: null,
     },
     status: {
       type: String,
