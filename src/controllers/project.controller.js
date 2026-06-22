@@ -379,12 +379,7 @@ const addMembersToProject = asyncHandler(async (req, res) => {
   const { members } = req.body;
   const { projectId } = req.params;
 
-  // const user = await User.findById(userId);
-
-  // if(!user) throw new ApiError(404, "User does not exists!");
-
   const project = await Project.findById(projectId).select("_id");
-
   if (!project) throw new ApiError(404, "Project does not exists!");
 
   const userIds = members.map((member) => member.userId);
