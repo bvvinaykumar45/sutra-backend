@@ -33,6 +33,8 @@ import {
   ProjectMemberRoleEnum,
 } from "../utils/constants.js";
 
+import taskRouter from "./task.routes.js";
+
 const router = new Router();
 
 router.use(verifyJWT);
@@ -77,5 +79,7 @@ router
     validate,
     deleteProjectMember,
   );
+
+router.use("/:projectId/tasks", taskRouter);
 
 export default router;
