@@ -288,4 +288,20 @@ const createTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, task, "Task created successfully"));
 });
 
-export { createTask, getTaskById, getTasks };
+const deleteTask = asyncHandler(async (req, res) => {
+  const { projectId, taskId } = req.params;
+
+  const project = await Project.findById(projectId).select("_id");
+  if (!project) throw new ApiError(404, "Project does not exists");
+
+  const task = await Task.findByIdAndDelete(taskId, {
+    returnDocument: "after",
+  });
+  if (!task) throw new ApiError(404, "Task does not exists");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { id: task._id }, "Task deleted successfully"));
+});
+
+export { createTask, deleteTask, getTaskById, getTasks };

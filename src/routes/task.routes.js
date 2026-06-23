@@ -1,15 +1,23 @@
 import { Router } from "express";
 
-import { projectRoleCheck } from "../middlewares/role-check.middleware.js";
+import {
+  projectRoleCheck,
+  taskActionPermissionCheck,
+} from "../middlewares/role-check.middleware.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { AvailableProjectMemberRoles } from "../utils/constants.js";
+import {
+  AvailableProjectMemberRoles,
+  TaskUsersEnum,
+} from "../utils/constants.js";
 import {
   createTaskValidator,
+  deleteTaskValidator,
   getTaskByIdValidator,
   getTasksValidator,
 } from "../validators/task.validator.js";
 import {
   createTask,
+  deleteTask,
   getTaskById,
   getTasks,
 } from "../controllers/task.controller.js";
@@ -38,6 +46,13 @@ router
     getTaskByIdValidator(),
     validate,
     getTaskById,
+  )
+  .delete(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    deleteTaskValidator(),
+    validate,
+    taskActionPermissionCheck([TaskUsersEnum.CREATED_BY]),
+    deleteTask,
   );
 
 export default router;
