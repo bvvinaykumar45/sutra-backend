@@ -1,5 +1,22 @@
 import { body, param } from "express-validator";
 
+export const getTaskByIdValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("taskId")
+      .trim()
+      .notEmpty()
+      .withMessage("task id is required")
+      .isMongoId()
+      .withMessage("Invalid task id"),
+  ];
+};
+
 export const createTaskValidator = () => {
   return [
     param("projectId")
