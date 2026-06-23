@@ -12,3 +12,9 @@ export const TaskStatusEnum = {
 };
 
 export const AvailableTaskStatuses = Object.values(TaskStatusEnum);
+
+export const TaskUsersEnum = {
+  CREATED_BY: "createdBy",
+  ASSIGNED_BY: "assignedBy",
+  ASSIGNED_TO: "assignedTo",
+};
