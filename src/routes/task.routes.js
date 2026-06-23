@@ -6,13 +6,24 @@ import { AvailableProjectMemberRoles } from "../utils/constants.js";
 import {
   createTaskValidator,
   getTaskByIdValidator,
+  getTasksValidator,
 } from "../validators/task.validator.js";
-import { createTask, getTaskById } from "../controllers/task.controller.js";
+import {
+  createTask,
+  getTaskById,
+  getTasks,
+} from "../controllers/task.controller.js";
 
 const router = Router({ mergeParams: true });
 
 router
   .route("/")
+  .get(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    getTasksValidator(),
+    validate,
+    getTasks,
+  )
   .post(
     projectRoleCheck(AvailableProjectMemberRoles),
     createTaskValidator(),
