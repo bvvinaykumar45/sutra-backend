@@ -43,7 +43,7 @@ const getTasks = asyncHandler(async (req, res) => {
       $addFields: {
         userIdsToLookup: {
           $filter: {
-            input: ["$createdBy", "$assignedBy", "$assignedTo"],
+            input: ["$createdBy", "$assignedTo"],
             as: "userIds",
             cond: { $ne: ["$$userIds", null] },
           },
@@ -85,20 +85,6 @@ const getTasks = asyncHandler(async (req, res) => {
               cond: { $eq: ["$$user._id", "$createdBy"] },
             },
           },
-        },
-        assignedBy: {
-          $ifNull: [
-            {
-              $first: {
-                $filter: {
-                  input: "$lookedUpUsers",
-                  as: "user",
-                  cond: { $eq: ["$$user._id", "$assignedBy"] },
-                },
-              },
-            },
-            null,
-          ],
         },
         assignedTo: {
           $ifNull: [
@@ -166,7 +152,7 @@ const getTaskById = asyncHandler(async (req, res) => {
       $addFields: {
         userIdsToLookup: {
           $filter: {
-            input: ["$createdBy", "$assignedBy", "$assignedTo"],
+            input: ["$createdBy", "$assignedTo"],
             as: "userId",
             cond: { $ne: ["$$userId", null] },
           },
@@ -208,20 +194,6 @@ const getTaskById = asyncHandler(async (req, res) => {
               cond: { $eq: ["$$user._id", "$createdBy"] },
             },
           },
-        },
-        assignedBy: {
-          $ifNull: [
-            {
-              $first: {
-                $filter: {
-                  input: "$lookedUpUsers",
-                  as: "user",
-                  cond: { $eq: ["$$user._id", "$assignedBy"] },
-                },
-              },
-            },
-            null,
-          ],
         },
         assignedTo: {
           $ifNull: [
@@ -278,7 +250,6 @@ const createTask = asyncHandler(async (req, res) => {
     if (!assignedMember)
       throw new ApiError(400, "User is not project member to assign task");
 
-    taskPayload.assignedBy = user._id;
     taskPayload.assignedTo = assignedTo;
   }
 
@@ -317,7 +288,6 @@ const updateTask = asyncHandler(async (req, res) => {
       throw new ApiError(400, "User is not project member to assign task");
 
     updatePayload.assignedTo = assignedTo;
-    updatePayload.assignedBy = user._id;
   }
 
   const updatedTask = await Task.findOneAndUpdate(
