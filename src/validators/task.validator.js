@@ -1,5 +1,7 @@
 import { body, param } from "express-validator";
 
+import { AvailableTaskStatuses } from "../utils/constants.js";
+
 export const getTasksValidator = () => {
   return [
     param("projectId")
@@ -57,6 +59,55 @@ export const createTaskValidator = () => {
       .optional()
       .isMongoId()
       .withMessage("Invalid User Id for assignedTo"),
+  ];
+};
+
+export const updateTaskValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("taskId")
+      .trim()
+      .notEmpty()
+      .withMessage("task id is required")
+      .isMongoId()
+      .withMessage("Invalid task id"),
+    body().custom((body) => {
+      const allowedFields = ["title", "description", "assignedTo", "status"];
+      const receivedFields = Object.keys(body);
+
+      const invalidFields = receivedFields.filter(
+        (field) => !allowedFields.includes(field),
+      );
+
+      if (invalidFields.length > 0) {
+        throw new Error(`Invalid fields: ${invalidFields.join(", ")}`);
+      }
+
+      if (receivedFields.length === 0) {
+        throw new Error(
+          "Provide at least one field to update among: title, description, status, assignedTo",
+        );
+      }
+
+      return true;
+    }),
+    body("title").trim().optional(),
+    body("description").trim().optional(),
+    body("assignedTo")
+      .trim()
+      .optional()
+      .isMongoId()
+      .withMessage("Invalid User Id for assignedTo"),
+    body("status")
+      .trim()
+      .optional()
+      .isIn(AvailableTaskStatuses)
+      .withMessage("Invalid Task Status"),
   ];
 };
 

@@ -7,6 +7,7 @@ import {
 import { validate } from "../middlewares/validator.middleware.js";
 import {
   AvailableProjectMemberRoles,
+  AvailableTaskUsers,
   TaskUsersEnum,
 } from "../utils/constants.js";
 import {
@@ -14,12 +15,14 @@ import {
   deleteTaskValidator,
   getTaskByIdValidator,
   getTasksValidator,
+  updateTaskValidator,
 } from "../validators/task.validator.js";
 import {
   createTask,
   deleteTask,
   getTaskById,
   getTasks,
+  updateTask,
 } from "../controllers/task.controller.js";
 
 const router = Router({ mergeParams: true });
@@ -46,6 +49,13 @@ router
     getTaskByIdValidator(),
     validate,
     getTaskById,
+  )
+  .patch(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    updateTaskValidator(),
+    validate,
+    taskActionPermissionCheck(AvailableTaskUsers),
+    updateTask,
   )
   .delete(
     projectRoleCheck(AvailableProjectMemberRoles),

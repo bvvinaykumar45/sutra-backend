@@ -6,6 +6,7 @@ import { Task } from "../models/task.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
+import { ProjectMemberRoleEnum } from "../utils/constants.js";
 
 const getTasks = asyncHandler(async (req, res) => {
   const { projectId } = req.params;
@@ -247,7 +248,7 @@ const getTaskById = asyncHandler(async (req, res) => {
     },
   ]);
 
-  if (task.length === 0) throw new ApiError(404, "Task does not exists");
+  if (!task) throw new ApiError(404, "Task does not exists");
 
   return res
     .status(200)
@@ -288,6 +289,56 @@ const createTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, task, "Task created successfully"));
 });
 
+const updateTask = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { projectId, taskId } = req.params;
+  const { title, description, assignedTo, status } = req.body;
+
+  const updatePayload = {};
+  if (title !== undefined) updatePayload.title = title;
+  if (description !== undefined) updatePayload.description = description;
+  if (status !== undefined) updatePayload.status = status;
+
+  if (assignedTo !== undefined) {
+    const isAllowed =
+      user.isAdmin ||
+      req.projectRole === ProjectMemberRoleEnum.PROJECT_ADMIN ||
+      String(req.currentTask?.createdBy) === String(user._id);
+
+    if (!isAllowed) {
+      throw new ApiError(403, "You are not allowed to reassign this task");
+    }
+
+    const assignedMember = await ProjectMember.findOne({
+      projectId,
+      userId: assignedTo,
+    }).select("_id");
+    if (!assignedMember)
+      throw new ApiError(400, "User is not project member to assign task");
+
+    updatePayload.assignedTo = assignedTo;
+    updatePayload.assignedBy = user._id;
+  }
+
+  const updatedTask = await Task.findOneAndUpdate(
+    {
+      projectId,
+      _id: taskId,
+    },
+    updatePayload,
+    {
+      returnDocument: "after",
+      runValidators: true,
+    },
+  );
+
+  if (!updatedTask) throw new ApiError(404, "Task does not exists");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedTask, "Task is updated successfully"));
+});
+
 const deleteTask = asyncHandler(async (req, res) => {
   const { projectId, taskId } = req.params;
 
@@ -304,4 +355,4 @@ const deleteTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { id: task._id }, "Task deleted successfully"));
 });
 
-export { createTask, deleteTask, getTaskById, getTasks };
+export { createTask, deleteTask, getTaskById, getTasks, updateTask };
