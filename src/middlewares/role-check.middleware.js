@@ -38,19 +38,28 @@ export const projectRoleCheck = (projectRoles) => {
 export const taskActionPermissionCheck = (taskOwnerShips) => {
   return asyncHandler(async (req, res, next) => {
     const user = req.user;
-    const { taskId } = req.params;
+    const { taskId, projectId } = req.params;
 
-    if (user.isAdmin || user.role === ProjectMemberRoleEnum.PROJECT_ADMIN)
+    if (user.isAdmin || req.projectRole === ProjectMemberRoleEnum.PROJECT_ADMIN)
       return next();
 
     const feildsToFetch = taskOwnerShips.join(" ");
-    const task = await Task.findById(taskId).select(feildsToFetch);
+    const task = await Task.findOne({
+      _id: taskId,
+      projectId,
+    }).select(feildsToFetch);
 
     if (task) {
-      const keys = Object.keys(task);
+      req.currentTask = {
+        _id: task._id,
+        createdBy: task.createdBy,
+        assignedTo: task.assignedTo,
+      };
       const currentUserId = user._id;
 
-      const isAllowed = keys.some((key) => task[key] === currentUserId);
+      const isAllowed = taskOwnerShips.some(
+        (key) => String(task[key]) === String(currentUserId),
+      );
 
       if (!isAllowed)
         throw new ApiError(403, "You are not allowed to perform the action");
