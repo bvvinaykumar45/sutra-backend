@@ -214,7 +214,7 @@ const getProjectById = asyncHandler(async (req, res) => {
 
   if (!project) throw new ApiError(404, "Project does not exists!");
 
-  project.role = user.role ?? null;
+  project.role = req.projectRole ?? null;
   return res
     .status(200)
     .json(new ApiResponse(200, project, "Project is fetched successfully."));

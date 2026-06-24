@@ -27,10 +27,10 @@ export const projectRoleCheck = (projectRoles) => {
     });
 
     if (!memberShip || !projectRoles.includes(memberShip.role)) {
-      throw new ApiError(403, "You are not allowed to perform the task");
+      throw new ApiError(403, "You are not allowed to perform the action");
     }
 
-    req.user.role = memberShip.role;
+    req.projectRole = memberShip.role;
     next();
   });
 };
