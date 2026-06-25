@@ -5,13 +5,13 @@ import {
   taskActionPermissionCheck,
 } from "../middlewares/role-check.middleware.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
 
 import {
   AvailableProjectMemberRoles,
   AvailableTaskUsers,
   TaskUsersEnum,
 } from "../utils/constants.js";
+import { taskAttachmentUpload } from "../utils/file-upload.js";
 
 import {
   addAttachmentsValidator,
@@ -78,7 +78,7 @@ router
     addAttachmentsValidator(),
     validate,
     taskActionPermissionCheck(AvailableTaskUsers),
-    upload.array("attachments", 3),
+    taskAttachmentUpload.array("attachments", 3),
     addAttachments,
   );
 
