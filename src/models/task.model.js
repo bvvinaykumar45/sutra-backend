@@ -38,6 +38,16 @@ const taskSchema = new Schema(
           url: String,
           mimeType: String,
           size: Number,
+          originalName: String,
+          uploadedBy: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+          },
+          uploadedAt: {
+            type: Date,
+            default: Date.now,
+          },
         },
       ],
       default: [],
