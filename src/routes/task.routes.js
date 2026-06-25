@@ -5,19 +5,25 @@ import {
   taskActionPermissionCheck,
 } from "../middlewares/role-check.middleware.js";
 import { validate } from "../middlewares/validator.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
+
 import {
   AvailableProjectMemberRoles,
   AvailableTaskUsers,
   TaskUsersEnum,
 } from "../utils/constants.js";
+
 import {
+  addAttachmentsValidator,
   createTaskValidator,
   deleteTaskValidator,
   getTaskByIdValidator,
   getTasksValidator,
   updateTaskValidator,
 } from "../validators/task.validator.js";
+
 import {
+  addAttachments,
   createTask,
   deleteTask,
   getTaskById,
@@ -63,6 +69,17 @@ router
     validate,
     taskActionPermissionCheck([TaskUsersEnum.CREATED_BY]),
     deleteTask,
+  );
+
+router
+  .route("/:taskId/attachments")
+  .post(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    addAttachmentsValidator(),
+    validate,
+    taskActionPermissionCheck(AvailableTaskUsers),
+    upload.array("attachments", 3),
+    addAttachments,
   );
 
 export default router;

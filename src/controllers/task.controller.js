@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import fs from "node:fs";
+2;
+
 import { ProjectMember } from "../models/project-member.model.js";
 import { Project } from "../models/project.model.js";
 import { Task } from "../models/task.model.js";
@@ -325,4 +328,57 @@ const deleteTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { id: task._id }, "Task deleted successfully"));
 });
 
-export { createTask, deleteTask, getTaskById, getTasks, updateTask };
+const addAttachments = asyncHandler(async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    throw new ApiError(400, "Please upload at least one file");
+  }
+
+  const { taskId, projectId } = req.params;
+  const user = req.user;
+
+  const task = await Task.findOne({
+    _id: taskId,
+    projectId,
+  });
+  if (!task) {
+    req.files.forEach((file) => {
+      if (fs.existsSync(file.path)) {
+        fs.rmSync(file.path);
+      }
+    });
+    throw new ApiError(404, "Task does not exists");
+  }
+
+  const attachments = req.files.map((file) => ({
+    url: `/public/uploads/tasks/${file.filename}`,
+    originalName: file.originalname,
+    mimeType: file.mimetype,
+    size: file.size,
+    uploadedBy: user._id,
+  }));
+
+  try {
+    task.attachments.push(...attachments);
+    await task.save();
+  } catch (error) {
+    req.files.forEach((file) => {
+      if (fs.existsSync(file.path)) {
+        fs.rmSync(file.path);
+      }
+    });
+    throw error;
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, { attachments }, "Files uploaded successfully"));
+});
+
+export {
+  addAttachments,
+  createTask,
+  deleteTask,
+  getTaskById,
+  getTasks,
+  updateTask,
+};

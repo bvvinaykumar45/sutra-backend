@@ -127,3 +127,20 @@ export const deleteTaskValidator = () => {
       .withMessage("Invalid task id"),
   ];
 };
+
+export const addAttachmentsValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("taskId")
+      .trim()
+      .notEmpty()
+      .withMessage("task id is required")
+      .isMongoId()
+      .withMessage("Invalid task id"),
+  ];
+};
