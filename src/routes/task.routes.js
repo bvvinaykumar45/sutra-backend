@@ -16,6 +16,7 @@ import { taskAttachmentUpload } from "../utils/file-upload.js";
 import {
   addAttachmentsValidator,
   createTaskValidator,
+  deleteAttachmentsValidator,
   deleteTaskValidator,
   getTaskByIdValidator,
   getTasksValidator,
@@ -25,6 +26,7 @@ import {
 import {
   addAttachments,
   createTask,
+  deleteAttachment,
   deleteTask,
   getTaskById,
   getTasks,
@@ -80,6 +82,16 @@ router
     taskActionPermissionCheck(AvailableTaskUsers),
     taskAttachmentUpload.array("attachments", 3),
     addAttachments,
+  );
+
+router
+  .route("/:taskId/attachments/:attachmentId")
+  .delete(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    deleteAttachmentsValidator(),
+    validate,
+    taskActionPermissionCheck(AvailableTaskUsers),
+    deleteAttachment,
   );
 
 export default router;

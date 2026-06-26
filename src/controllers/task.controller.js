@@ -10,6 +10,7 @@ import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { ProjectMemberRoleEnum } from "../utils/constants.js";
+import path from "node:path";
 
 const getTasks = asyncHandler(async (req, res) => {
   const { projectId } = req.params;
@@ -374,9 +375,49 @@ const addAttachments = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { attachments }, "Files uploaded successfully"));
 });
 
+const deleteAttachment = asyncHandler(async (req, res) => {
+  const { taskId, projectId, attachmentId } = req.params;
+  const user = req.user;
+
+  const task = await Task.findOne({
+    _id: taskId,
+    projectId,
+    "attachments._id": attachmentId,
+  });
+  if (!task) throw new ApiError(404, "Task does not exists");
+
+  const attachmentDetails = task.attachments.id(attachmentId);
+  if (!attachmentDetails) {
+    throw new ApiError(404, "Attachment does not exist");
+  }
+
+  const filePath = path.join(
+    "public",
+    attachmentDetails.url.replace("/public/", ""),
+  );
+
+  task.attachments.pull(attachmentId);
+  await task.save();
+
+  if (fs.existsSync(filePath)) {
+    fs.rmSync(filePath);
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { _id: attachmentId },
+        "Attachment deleted successfully",
+      ),
+    );
+});
+
 export {
   addAttachments,
   createTask,
+  deleteAttachment,
   deleteTask,
   getTaskById,
   getTasks,
