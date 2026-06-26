@@ -107,13 +107,18 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **`PATCH /:projectId/members/:userId`** - Update member role (secured, Admin only)
 - **`DELETE /:projectId/members/:userId`** - Remove member (secured, Admin only)
 
-**Task Routes (`/api/v1/tasks`)**
+**Task Routes (`/api/v1/projects/:projectId/tasks`)** Admin/Project Admin direct access
 
-- **`GET /:projectId`** - List proeject tasks (secured, role-based)
-- **`POST /:projectId`** - Create task (secured, Admin/ Poject Admin)
-- **`GET /:projectId/t/:taskId`** - Get task details (secured, role-based)
-- **`PUT /:projectId/t/:taskId`** - Update task (secured, Admin/Project Admin)
-- **`DELETE /:projectId/t/:taskId`** - Delete task (secured, Admin/Project Admin)
+> NOTE: Projects Heirarchy POV
+
+- **`GET /`** - List project tasks (secured, role-based)
+- **`POST /`** - Create task (secured, Admin/ Project Admin/ Member)
+- **`GET /:taskId`** - Get task details (secured, role-based)
+- **`PATCH /:taskId`** - Update task (secured, Admin/Project Admin/Member -> CreatedBy, AssignedTo)
+- **`DELETE /:taskId`** - Delete task (secured, Admin/Project Admin/Member -> CreatedBy)
+- **`POST /:taskId/attachments`** - Upload Attachment (secured, Admin/Project Admin/Member -> CreatedBy, AssignedTo)
+- **`GET /:taskId/attachments/:attachmentId?mode=<mode>`** - Fetch Attachment (secured, role-based)
+- **`DELETE /:taskId/attachments/:attachmentId`** - Delete Attachment (secured, Admin/Project Admin/Member -> CreatedBy, UploadedBy)
 - **`POST /:projectId/t/:taskId/subtasks`** - Create subtask (secured, Admin/Project Admin)
 - **`PUT /:projectId/st/:subtaskId`** - Update subtask (secured, role-based)
 - **`DELETE /:projectId/st/:subTaskId`** - Delete subtask (secured, Admin/ Project Admin)
@@ -133,7 +138,7 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 | Create Project              | ✅    | ❌            | ❌     |
 | Update/Delete Project       | ✅    | ❌            | ❌     |
 | Manage Project Members      | ✅    | ✅            | ❌     |
-| Create/Update/Delete Tasks  | ✅    | ✅            | ❌     |
+| Create/Update/Delete Tasks  | ✅    | ✅            | ✅     |
 | View Tasks                  | ✅    | ✅            | ✅     |
 | Update Subtasks Status      | ✅    | ✅            | ✅     |
 | Create/Delete Subtasks      | ✅    | ✅            | ❌     |
