@@ -92,7 +92,6 @@ router
     projectRoleCheck(AvailableProjectMemberRoles),
     fetchAttachmentValidator(),
     validate,
-    taskActionPermissionCheck(AvailableTaskUsers),
     fetchAttachment,
   )
   .delete(
