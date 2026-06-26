@@ -414,11 +414,46 @@ const deleteAttachment = asyncHandler(async (req, res) => {
     );
 });
 
+const fetchAttachment = asyncHandler(async (req, res) => {
+  const { projectId, taskId, attachmentId } = req.params;
+  const { mode } = req.query;
+
+  const task = await Task.findOne({
+    _id: taskId,
+    projectId,
+    "attachments._id": attachmentId,
+  });
+  if (!task) throw new ApiError(404, "Task does not exists");
+
+  const attachmentDetails = task.attachments.id(attachmentId);
+  if (!attachmentDetails) throw new ApiError(404, "Attachment does not exists");
+
+  const filePath = path.join(
+    process.cwd(),
+    "public",
+    attachmentDetails.url.replace("/public/", ""),
+  );
+  if (!fs.existsSync(filePath)) {
+    throw new ApiError(404, "Attachment does not exists");
+  }
+
+  const disposition = mode === "download" ? "attachment" : "inline";
+
+  res.set({
+    "Content-Disposition": `${disposition}; filename=${attachmentDetails.originalName}`,
+    "Content-Type": attachmentDetails.mimeType,
+    "Content-Length": attachmentDetails.size,
+  });
+
+  return res.status(200).sendFile(filePath);
+});
+
 export {
   addAttachments,
   createTask,
   deleteAttachment,
   deleteTask,
+  fetchAttachment,
   getTaskById,
   getTasks,
   updateTask,

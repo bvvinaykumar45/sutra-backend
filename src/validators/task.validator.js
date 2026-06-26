@@ -1,4 +1,4 @@
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 
 import { AvailableTaskStatuses } from "../utils/constants.js";
 
@@ -165,5 +165,34 @@ export const deleteAttachmentsValidator = () => {
       .withMessage("attachment id is required")
       .isMongoId()
       .withMessage("Invalid attachment id"),
+  ];
+};
+
+export const fetchAttachmentValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("taskId")
+      .trim()
+      .notEmpty()
+      .withMessage("task id is required")
+      .isMongoId()
+      .withMessage("Invalid task id"),
+    param("attachmentId")
+      .trim()
+      .notEmpty()
+      .withMessage("attachment id is required")
+      .isMongoId()
+      .withMessage("Invalid attachment id"),
+    query("mode")
+      .trim()
+      .notEmpty()
+      .withMessage("mode is required, pass it as query")
+      .isIn(["preview", "download"])
+      .withMessage("Invalid Mode, pass either preview or download"),
   ];
 };

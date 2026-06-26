@@ -18,6 +18,7 @@ import {
   createTaskValidator,
   deleteAttachmentsValidator,
   deleteTaskValidator,
+  fetchAttachmentValidator,
   getTaskByIdValidator,
   getTasksValidator,
   updateTaskValidator,
@@ -28,6 +29,7 @@ import {
   createTask,
   deleteAttachment,
   deleteTask,
+  fetchAttachment,
   getTaskById,
   getTasks,
   updateTask,
@@ -86,6 +88,13 @@ router
 
 router
   .route("/:taskId/attachments/:attachmentId")
+  .get(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    fetchAttachmentValidator(),
+    validate,
+    taskActionPermissionCheck(AvailableTaskUsers),
+    fetchAttachment,
+  )
   .delete(
     projectRoleCheck(AvailableProjectMemberRoles),
     deleteAttachmentsValidator(),
