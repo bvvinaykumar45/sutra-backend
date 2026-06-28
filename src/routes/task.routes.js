@@ -35,6 +35,8 @@ import {
   updateTask,
 } from "../controllers/task.controller.js";
 
+import subTaskRouter from "./sub-task.routes.js";
+
 const router = Router({ mergeParams: true });
 
 router
@@ -101,5 +103,7 @@ router
     taskActionPermissionCheck(AvailableTaskUsers),
     deleteAttachment,
   );
+
+router.use("/:taskId/sub-tasks", subTaskRouter);
 
 export default router;
