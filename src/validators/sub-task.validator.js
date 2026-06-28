@@ -18,3 +18,20 @@ export const createSubTaskValidator = () => {
     body("description").trim().optional(),
   ];
 };
+
+export const getSubTasksValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("taskId")
+      .trim()
+      .notEmpty()
+      .withMessage("task id is required")
+      .isMongoId()
+      .withMessage("Invalid task id"),
+  ];
+};

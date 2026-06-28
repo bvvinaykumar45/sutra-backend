@@ -9,13 +9,25 @@ import {
   AvailableProjectMemberRoles,
   AvailableTaskUsers,
 } from "../utils/constants.js";
-import { createSubTaskValidator } from "../validators/sub-task.validator.js";
-import { createSubTask } from "../controllers/sub-task.controller.js";
+import {
+  createSubTaskValidator,
+  getSubTasksValidator,
+} from "../validators/sub-task.validator.js";
+import {
+  createSubTask,
+  getSubTasks,
+} from "../controllers/sub-task.controller.js";
 
 const router = Router({ mergeParams: true });
 
 router
   .route("/")
+  .get(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    getSubTasksValidator(),
+    validate,
+    getSubTasks,
+  )
   .post(
     projectRoleCheck(AvailableProjectMemberRoles),
     createSubTaskValidator(),
