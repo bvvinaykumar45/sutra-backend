@@ -119,4 +119,40 @@ const updateSubTask = asyncHandler(async (req, res) => {
     );
 });
 
-export { createSubTask, getSubTaskById, getSubTasks, updateSubTask };
+const deleteSubTask = asyncHandler(async (req, res) => {
+  const { projectId, taskId, subTaskId } = req.params;
+
+  const task = await Task.findOne({
+    _id: taskId,
+    projectId,
+  }).select("_id");
+
+  if (!task) {
+    throw new ApiError(404, "Task does not exists");
+  }
+
+  const subTask = await SubTask.findOneAndDelete({
+    _id: subTaskId,
+    taskId,
+  });
+
+  if (!subTask) throw new ApiError(404, "Sub Task does not exists");
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { _id: subTask._id },
+        "Sub Task deleted successfully.",
+      ),
+    );
+});
+
+export {
+  createSubTask,
+  deleteSubTask,
+  getSubTaskById,
+  getSubTasks,
+  updateSubTask,
+};

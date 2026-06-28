@@ -13,6 +13,7 @@ import {
 
 import {
   createSubTaskValidator,
+  deleteSubTaskValidator,
   getSubTaskByIdValidator,
   getSubTasksValidator,
   updateSubTaskValidator,
@@ -20,6 +21,7 @@ import {
 
 import {
   createSubTask,
+  deleteSubTask,
   getSubTaskById,
   getSubTasks,
   updateSubTask,
@@ -57,6 +59,13 @@ router
     validate,
     taskActionPermissionCheck(AvailableTaskUsers),
     updateSubTask,
+  )
+  .delete(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    deleteSubTaskValidator(),
+    validate,
+    taskActionPermissionCheck(AvailableTaskUsers),
+    deleteSubTask,
   );
 
 export default router;
