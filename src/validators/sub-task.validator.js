@@ -35,3 +35,26 @@ export const getSubTasksValidator = () => {
       .withMessage("Invalid task id"),
   ];
 };
+
+export const getSubTaskByIdValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("project id is required")
+      .isMongoId()
+      .withMessage("Invalid project id"),
+    param("taskId")
+      .trim()
+      .notEmpty()
+      .withMessage("task id is required")
+      .isMongoId()
+      .withMessage("Invalid task id"),
+    param("subTaskId")
+      .trim()
+      .notEmpty()
+      .withMessage("sub task id is required")
+      .isMongoId()
+      .withMessage("Invalid sub task id"),
+  ];
+};

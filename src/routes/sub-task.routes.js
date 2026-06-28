@@ -5,16 +5,21 @@ import {
   taskActionPermissionCheck,
 } from "../middlewares/role-check.middleware.js";
 import { validate } from "../middlewares/validator.middleware.js";
+
 import {
   AvailableProjectMemberRoles,
   AvailableTaskUsers,
 } from "../utils/constants.js";
+
 import {
   createSubTaskValidator,
+  getSubTaskByIdValidator,
   getSubTasksValidator,
 } from "../validators/sub-task.validator.js";
+
 import {
   createSubTask,
+  getSubTaskById,
   getSubTasks,
 } from "../controllers/sub-task.controller.js";
 
@@ -34,6 +39,15 @@ router
     validate,
     taskActionPermissionCheck(AvailableTaskUsers),
     createSubTask,
+  );
+
+router
+  .route("/:subTaskId")
+  .get(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    getSubTaskByIdValidator(),
+    validate,
+    getSubTaskById,
   );
 
 export default router;
