@@ -15,12 +15,14 @@ import {
   createSubTaskValidator,
   getSubTaskByIdValidator,
   getSubTasksValidator,
+  updateSubTaskValidator,
 } from "../validators/sub-task.validator.js";
 
 import {
   createSubTask,
   getSubTaskById,
   getSubTasks,
+  updateSubTask,
 } from "../controllers/sub-task.controller.js";
 
 const router = Router({ mergeParams: true });
@@ -48,6 +50,13 @@ router
     getSubTaskByIdValidator(),
     validate,
     getSubTaskById,
+  )
+  .patch(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    updateSubTaskValidator(),
+    validate,
+    taskActionPermissionCheck(AvailableTaskUsers),
+    updateSubTask,
   );
 
 export default router;

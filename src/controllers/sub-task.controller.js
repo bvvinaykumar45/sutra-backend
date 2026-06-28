@@ -79,4 +79,44 @@ const createSubTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, subTask, "Sub Task created successfully."));
 });
 
-export { createSubTask, getSubTaskById, getSubTasks };
+const updateSubTask = asyncHandler(async (req, res) => {
+  const { title, description, isCompleted } = req.body;
+  const { projectId, taskId, subTaskId } = req.params;
+
+  const task = await Task.findOne({
+    _id: taskId,
+    projectId,
+  }).select("_id");
+
+  if (!task) {
+    throw new ApiError(404, "Task does not exists");
+  }
+
+  const updatePayload = {};
+
+  if (title !== undefined) updatePayload.title = title;
+  if (description !== undefined) updatePayload.description = description;
+  if (isCompleted !== undefined) updatePayload.isCompleted = isCompleted;
+
+  const updatedSubTask = await SubTask.findOneAndUpdate(
+    {
+      _id: subTaskId,
+      taskId,
+    },
+    updatePayload,
+    {
+      returnDocument: "after",
+      runValidators: true,
+    },
+  );
+
+  if (!updatedSubTask) throw new ApiError(404, "Sub Task does not exists");
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedSubTask, "Sub Task updated successfully."),
+    );
+});
+
+export { createSubTask, getSubTaskById, getSubTasks, updateSubTask };
