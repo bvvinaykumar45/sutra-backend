@@ -119,9 +119,11 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **`POST /:taskId/attachments`** - Upload Attachment (secured, Admin/Project Admin/Member -> CreatedBy, AssignedTo)
 - **`GET /:taskId/attachments/:attachmentId?mode=<mode>`** - Fetch Attachment (secured, role-based)
 - **`DELETE /:taskId/attachments/:attachmentId`** - Delete Attachment (secured, Admin/Project Admin/Member -> CreatedBy, UploadedBy)
-- **`POST /:projectId/t/:taskId/subtasks`** - Create subtask (secured, Admin/Project Admin)
-- **`PUT /:projectId/st/:subtaskId`** - Update subtask (secured, role-based)
-- **`DELETE /:projectId/st/:subTaskId`** - Delete subtask (secured, Admin/ Project Admin)
+- **`GET /:taskId/sub-tasks`** - List task's subtask (secured, role-based)
+- **`POST /:taskId/sub-tasks`** - Create subtask (secured, Admin/Project Admin/Member)
+- **`GET /:taskId/sub-tasks/:subTaskId`** - List task's subtask (secured, role-based)
+- **`PATCH /:taskId/sub-tasks/:subTaskId`** - Update subtask (secured, Admin/Project Admin/Member)
+- **`DELETE /:taskId/sub-tasks/:subTaskId`** - Delete subtask (secured, Admin/ Project Admin/Member)
 
 **Note Routes (`/api/v1/notes/`)**
 
@@ -141,7 +143,7 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 | Create/Update/Delete Tasks  | ✅    | ✅            | ✅     |
 | View Tasks                  | ✅    | ✅            | ✅     |
 | Update Subtasks Status      | ✅    | ✅            | ✅     |
-| Create/Delete Subtasks      | ✅    | ✅            | ❌     |
+| Create/Delete Subtasks      | ✅    | ✅            | ✅     |
 | Create/Update/Delete Notess | ✅    | ❌            | ❌     |
 | View Notes                  | ✅    | ✅            | ✅     |
 
