@@ -34,6 +34,7 @@ import {
 } from "../utils/constants.js";
 
 import taskRouter from "./task.routes.js";
+import projectNoteRouter from "./project-note.routes.js";
 
 const router = new Router();
 
@@ -81,5 +82,6 @@ router
   );
 
 router.use("/:projectId/tasks", taskRouter);
+router.use("/:projectId/notes", projectNoteRouter);
 
 export default router;
