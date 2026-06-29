@@ -12,3 +12,14 @@ export const createProjectNoteValidator = () => {
     body("content").trim().notEmpty().withMessage("Content can not be empty"),
   ];
 };
+
+export const getProjectNotesValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("Project id is required")
+      .isMongoId()
+      .withMessage("Invalid projectId"),
+  ];
+};

@@ -25,4 +25,23 @@ const createProjectNote = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, note, "Project Note is created successfully."));
 });
 
-export { createProjectNote };
+const getProjectNotes = asyncHandler(async (req, res) => {
+  const { projectId } = req.params;
+
+  const project = await Project.findById(projectId).select("_id");
+  if (!project) throw new ApiError(404, "Project does not exists");
+
+  const notes = await ProjectNote.find({
+    projectId,
+  })
+    .populate("createdBy", "_id userName email avatar")
+    .sort({ createdAt: -1 });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, notes, "Project Notes are fetched successfully."),
+    );
+});
+
+export { createProjectNote, getProjectNotes };
