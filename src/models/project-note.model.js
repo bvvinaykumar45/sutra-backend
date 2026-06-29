@@ -2,6 +2,11 @@ import mongoose, { mongo, Schema } from "mongoose";
 
 const projectNoteSchema = new Schema(
   {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     content: {
       type: String,
       trim: true,
