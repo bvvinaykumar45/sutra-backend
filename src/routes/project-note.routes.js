@@ -7,10 +7,12 @@ import { AvailableProjectMemberRoles } from "../utils/constants.js";
 
 import {
   createProjectNoteValidator,
+  getProjectNoteByIdValidator,
   getProjectNotesValidator,
 } from "../validators/project-note.validator.js";
 import {
   createProjectNote,
+  getProjectNoteById,
   getProjectNotes,
 } from "../controllers/project-note.controller.js";
 
@@ -29,6 +31,15 @@ router
     createProjectNoteValidator(),
     validate,
     createProjectNote,
+  );
+
+router
+  .route("/:noteId")
+  .get(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    getProjectNoteByIdValidator(),
+    validate,
+    getProjectNoteById,
   );
 
 export default router;

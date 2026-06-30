@@ -23,3 +23,20 @@ export const getProjectNotesValidator = () => {
       .withMessage("Invalid projectId"),
   ];
 };
+
+export const getProjectNoteByIdValidator = () => {
+  return [
+    param("projectId")
+      .trim()
+      .notEmpty()
+      .withMessage("Project id is required")
+      .isMongoId()
+      .withMessage("Invalid projectId"),
+    param("noteId")
+      .trim()
+      .notEmpty()
+      .withMessage("Project Note Id is required")
+      .isMongoId()
+      .withMessage("Invalid project note id"),
+  ];
+};
