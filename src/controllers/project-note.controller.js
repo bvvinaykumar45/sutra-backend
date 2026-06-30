@@ -62,4 +62,23 @@ const getProjectNoteById = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, note, "Project Note fetched successfully."));
 });
 
-export { createProjectNote, getProjectNoteById, getProjectNotes };
+const updateProjectNote = asyncHandler(async (req, res) => {
+  const { title, content } = req.body;
+  const note = req.projectNote;
+
+  if (title !== undefined) note.title = title;
+  if (content !== undefined) note.content = content;
+
+  await note.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, note, "Project note updated successfully."));
+});
+
+export {
+  createProjectNote,
+  getProjectNoteById,
+  getProjectNotes,
+  updateProjectNote,
+};
