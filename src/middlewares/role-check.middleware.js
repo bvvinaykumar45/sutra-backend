@@ -1,4 +1,5 @@
 import { ProjectMember } from "../models/project-member.model.js";
+import { ProjectNote } from "../models/project-note.model.js";
 import { Task } from "../models/task.model.js";
 
 import { ApiError } from "../utils/api-error.js";
@@ -70,3 +71,31 @@ export const taskActionPermissionCheck = (taskOwnerShips) => {
     }
   });
 };
+
+export const projectNoteActionPermissionCheck = asyncHandler(
+  async (req, res, next) => {
+    const { projectId, noteId } = req.params;
+    const user = req.user;
+
+    const note = await ProjectNote.findOne({
+      _id: noteId,
+      projectId,
+    });
+
+    if (!note) {
+      throw new ApiError(404, "Project Note does not exist");
+    }
+
+    const isNoteCreator = String(note.createdBy) === String(user._id);
+    const isProjectAdmin =
+      req.projectRole === ProjectMemberRoleEnum.PROJECT_ADMIN;
+
+    if (!user.isAdmin && !isProjectAdmin && !isNoteCreator) {
+      throw new ApiError(403, "You are not allowed to perform this action");
+    }
+
+    req.projectNote = note;
+
+    next();
+  },
+);
