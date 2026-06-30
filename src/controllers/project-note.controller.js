@@ -76,8 +76,25 @@ const updateProjectNote = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, note, "Project note updated successfully."));
 });
 
+const deleteProjectNote = asyncHandler(async (req, res) => {
+  const note = req.projectNote;
+
+  await note.deleteOne();
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { _id: note._id },
+        "Project Note deleted successfully.",
+      ),
+    );
+});
+
 export {
   createProjectNote,
+  deleteProjectNote,
   getProjectNoteById,
   getProjectNotes,
   updateProjectNote,

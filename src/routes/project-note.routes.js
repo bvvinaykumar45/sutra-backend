@@ -10,12 +10,14 @@ import { AvailableProjectMemberRoles } from "../utils/constants.js";
 
 import {
   createProjectNoteValidator,
+  deleteProjectNoteValidator,
   getProjectNoteByIdValidator,
   getProjectNotesValidator,
   updateProjectNoteValidator,
 } from "../validators/project-note.validator.js";
 import {
   createProjectNote,
+  deleteProjectNote,
   getProjectNoteById,
   getProjectNotes,
   updateProjectNote,
@@ -52,6 +54,13 @@ router
     validate,
     projectNoteActionPermissionCheck,
     updateProjectNote,
+  )
+  .delete(
+    projectRoleCheck(AvailableProjectMemberRoles),
+    deleteProjectNoteValidator(),
+    validate,
+    projectNoteActionPermissionCheck,
+    deleteProjectNote,
   );
 
 export default router;
