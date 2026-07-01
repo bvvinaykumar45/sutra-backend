@@ -125,27 +125,27 @@ Sutra Backend is a RESTful API service designed to support collaborative project
 - **`PATCH /:taskId/sub-tasks/:subTaskId`** - Update subtask (secured, Admin/Project Admin/Member)
 - **`DELETE /:taskId/sub-tasks/:subTaskId`** - Delete subtask (secured, Admin/ Project Admin/Member)
 
-**Note Routes (`/api/v1/notes/`)**
+**Note Routes (`/api/v1/projects/:projectId/notes`)**
 
-- **`GET /:projectId`** - List project notes (secured, role-based)
-- **`POST /:projectId`** - Create note (secured, Admin only)
-- **`GET /:projectId/n/:notesId`** - Get note details (secured, role-based)
-- **`PUT /:projecctId/n/:noteId`** - Update note (secured, Admin only)
-- **`DELETE /:projectId/n/:noteId`** - Delete note (secured, Admin only)
+- **`GET /`** - List project notes (secured, role-based)
+- **`POST /`** - Create note (secured, Admin/Project Admin/Member)
+- **`GET /:noteId`** - Get note details (secured, role-based)
+- **`PATCH /:noteId`** - Update note (secured, Admin/Project Admin/Member -> CreatedBy)
+- **`DELETE /:noteId`** - Delete note (secured, Admin/Project Admin/Member -> CreatedBy)
 
 #### 4.2 Permission Matrix
 
-| Feature                     | Admin | Project Admin | Member |
-| --------------------------- | ----- | ------------- | ------ |
-| Create Project              | ✅    | ❌            | ❌     |
-| Update/Delete Project       | ✅    | ❌            | ❌     |
-| Manage Project Members      | ✅    | ✅            | ❌     |
-| Create/Update/Delete Tasks  | ✅    | ✅            | ✅     |
-| View Tasks                  | ✅    | ✅            | ✅     |
-| Update Subtasks Status      | ✅    | ✅            | ✅     |
-| Create/Delete Subtasks      | ✅    | ✅            | ✅     |
-| Create/Update/Delete Notess | ✅    | ❌            | ❌     |
-| View Notes                  | ✅    | ✅            | ✅     |
+| Feature                    | Admin | Project Admin | Member |
+| -------------------------- | ----- | ------------- | ------ |
+| Create Project             | ✅    | ❌            | ❌     |
+| Update/Delete Project      | ✅    | ❌            | ❌     |
+| Manage Project Members     | ✅    | ✅            | ❌     |
+| Create/Update/Delete Tasks | ✅    | ✅            | ✅     |
+| View Tasks                 | ✅    | ✅            | ✅     |
+| Update Subtasks Status     | ✅    | ✅            | ✅     |
+| Create/Delete Subtasks     | ✅    | ✅            | ✅     |
+| Create/Update/Delete Notes | ✅    | ✅            | ✅     |
+| View Notes                 | ✅    | ✅            | ✅     |
 
 #### 4.3 Data Models
 
