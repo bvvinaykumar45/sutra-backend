@@ -1,7 +1,7 @@
 {
   "name": "sutra-backend",
   "version": "1.0.0",
-  "description": "A project management application for beginners",
+  "description": "A RESTful project management backend with hierarchical resources and role-based access control",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -19,8 +19,8 @@
     "project",
     "management"
   ],
-  "author": "venkata vinay kumar b",
-  "license": "ISC",
+  "author": "Venkata Vinay Kumar B",
+  "license": "MIT",
   "devDependencies": {
     "husky": "^9.1.7",
     "nodemon": "^3.1.14",
