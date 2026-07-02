@@ -245,7 +245,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     "_id userName email refreshToken",
   );
 
-  if (!user.refreshToken) {
+  if (!user || user.refreshToken !== userRefreshToken) {
     throw new ApiError(401, "Invalid Refresh Token");
   }
 
