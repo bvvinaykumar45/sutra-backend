@@ -1,0 +1,35 @@
+info:
+  name: Login
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "{{USER_EMAIL}}",
+        "password": "{{USER_PASSWORD}}"
+      }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Authenticate User
+
+  Authenticates a registered user and starts a new authenticated session.
+
+  ### Request Body
+
+  - `email`: Required string containing a valid email address.
+  - `password`: Required string containing the user's password.
+
+  ### Authentication
+
+  Not required.

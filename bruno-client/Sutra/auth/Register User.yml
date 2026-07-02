@@ -1,0 +1,44 @@
+info:
+  name: Register User
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "userName": "{{REGISTER_USERNAME}}",
+        "email": "{{REGISTER_EMAIL}}",
+        "password": "{{REGISTER_PASSWORD}}",
+        "fullName": "{{REGISTER_FULL_NAME}}"
+      }
+  auth: none
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Register User
+
+  Creates a new user account and initiates the email-verification process.
+
+  ### Request Body
+
+  - `userName`: Required string. Must be lowercase and at least 3 characters long.
+  - `email`: Required string containing a valid email address.
+  - `password`: Required string of at least 8 characters. Must contain at least one lowercase letter, one uppercase letter, one number, and one symbol.
+  - `fullName`: Optional string containing the user's full name.
+
+  ### Authentication
+
+  Not required.
+
+  ### Notes
+
+  Newly registered users are created as regular users and cannot assign themselves system-admin access.

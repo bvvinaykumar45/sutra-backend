@@ -1,0 +1,33 @@
+info:
+  name: Verify Email
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/auth/verify-email/{{EMAIL_VERIFY_TOKEN}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Verify Email
+
+  Verifies a newly registered user's email address using the temporary verification token sent by email.
+
+  ### Path Parameters
+
+  - `verificationToken`: Required hexadecimal string containing the email-verification token.
+
+  ### Authentication
+
+  Not required.
+
+  ### Notes
+
+  The verification token is temporary and can be used only while it remains valid.
+
+  Since this endpoint changes the user's verification state, it uses the `POST` method. Until a frontend verification page is implemented, this request should be executed through Bruno rather than by opening the backend URL directly in a browser.

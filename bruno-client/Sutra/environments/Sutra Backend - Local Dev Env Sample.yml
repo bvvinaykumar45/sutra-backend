@@ -1,0 +1,28 @@
+name: Sutra Backend - Local Dev Env Sample
+variables:
+  - name: BASE_URL
+    value: http://localhost:8000
+  - name: USER_EMAIL
+    value: ""
+  - secret: true
+    name: USER_PASSWORD
+  - name: REGISTER_USERNAME
+    value: ""
+  - name: REGISTER_EMAIL
+    value: ""
+  - secret: true
+    name: REGISTER_PASSWORD
+  - name: REGISTER_FULL_NAME
+    value: ""
+  - name: EMAIL_VERIFY_TOKEN
+    value: ""
+  - name: RESET_TOKEN
+    value: ""
+  - secret: true
+    name: NEW_PASSWORD
+  - secret: true
+    name: CONFIRM_PASSWORD
+  - secret: true
+    name: CURRENT_PASSWORD
+  - name: REFRESH_TOKEN
+    value: ""

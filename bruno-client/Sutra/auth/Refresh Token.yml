@@ -1,0 +1,42 @@
+info:
+  name: Refresh Access Token
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/auth/refresh-token"
+  body:
+    type: json
+    data: |-
+      {
+        "refresh-token": "{{REFRESH_TOKEN}}"
+      }
+  auth: none
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Refresh Access Token
+
+  Generates a new access token and rotates the authenticated user's refresh token.
+
+  ### Request Body
+
+  - `refresh-token`: Required string containing a valid refresh token.
+
+  ### Authentication
+
+  A valid refresh token is required. It may be provided through the request body, the `refresh-token` cookie, or the `Authorization` header.
+
+  This Bruno request sends it through the request body.
+
+  ### Notes
+
+  A successful request returns the user details and sets new `access-token` and `refresh-token` HTTP-only cookies.
+
+  The previous refresh token becomes invalid after successful token rotation.
