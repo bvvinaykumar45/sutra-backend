@@ -1,0 +1,52 @@
+info:
+  name: Update Project
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "{{PROJECT_TITLE}}",
+        "description": "{{PROJECT_DESCRIPTION}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Update Project
+
+  Partially updates an existing project's editable details.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Request Body
+
+  At least one of the following fields must be provided:
+
+  - `title`: Optional non-empty string containing the updated project title.
+  - `description`: Optional string containing the updated project description.
+
+  Fields other than `title` and `description` are not accepted.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  Only a system administrator can update a project.
+
+  ### Notes
+
+  This endpoint uses `PATCH`, so fields omitted from the request body remain unchanged.

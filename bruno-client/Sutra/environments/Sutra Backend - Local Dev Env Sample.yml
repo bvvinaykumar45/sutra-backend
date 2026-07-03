@@ -26,3 +26,9 @@ variables:
     name: CURRENT_PASSWORD
   - name: REFRESH_TOKEN
     value: ""
+  - name: PROJECT_TITLE
+    value: ""
+  - name: PROJECT_DESCRIPTION
+    value: ""
+  - name: PROJECT_ID
+    value: ""

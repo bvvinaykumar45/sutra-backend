@@ -1,0 +1,33 @@
+info:
+  name: Get Projects
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Get Projects
+
+  Returns the projects accessible to the currently authenticated user.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators can view all projects.
+  - Regular users can view only the projects in which they are project admins or members.
+
+  ### Request Body
+
+  No request body is required.

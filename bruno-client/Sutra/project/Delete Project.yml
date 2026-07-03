@@ -1,0 +1,42 @@
+info:
+  name: Delete Project
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Delete Project
+
+  Deletes an existing project and its currently handled dependent records.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  Only a system administrator can delete a project.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Warning
+
+  This is a destructive operation and cannot be undone.
+
+  Project cascade deletion is not yet complete for every dependent resource. Review and complete cleanup for tasks, subtasks, notes, project members, and attachment files before considering this endpoint production-ready.

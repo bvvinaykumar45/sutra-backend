@@ -1,0 +1,37 @@
+info:
+  name: Get Project By Id
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Get Project By ID
+
+  Returns the details of a specific project accessible to the authenticated user.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators can access any project.
+  - Project admins and members can access projects to which they belong.
+
+  ### Request Body
+
+  No request body is required.
