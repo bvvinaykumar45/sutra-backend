@@ -1,0 +1,55 @@
+info:
+  name: Add Members to Project
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/members"
+  body:
+    type: json
+    data: |-
+      {
+        "members": [
+          {
+            "userId": "{{USER_ID}}",
+            "role": "member"
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Add Members to Project
+
+  Adds one or more existing users to a project with the specified project-level roles.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Request Body
+
+  - `members`: Required non-empty array containing the users to add.
+  - `members[].userId`: Required valid MongoDB ObjectId identifying an existing user.
+  - `members[].role`: Required project role. Allowed values are `project_admin` and `member`.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and project admins can add members to the project.
+
+  ### Notes
+
+  Multiple users can be added in a single request by adding more objects to the `members` array.
+
+  Users must already have registered Sutra accounts before they can be added to a project.

@@ -1,0 +1,41 @@
+info:
+  name: Delete Project Member
+  type: http
+  seq: 9
+
+http:
+  method: DELETE
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/members/{{USER_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Delete Project Member
+
+  Removes an existing member from the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `userId`: Required valid MongoDB ObjectId identifying the user to remove.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and project admins can remove members from the project.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Warning
+
+  Removing a user from the project revokes their project-level access. This operation does not delete the user's Sutra account.

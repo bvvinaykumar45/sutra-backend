@@ -32,3 +32,7 @@ variables:
     value: ""
   - name: PROJECT_ID
     value: ""
+  - name: PROJECT_MEMBER_ROLE
+    value: ""
+  - name: USER_ID
+    value: ""

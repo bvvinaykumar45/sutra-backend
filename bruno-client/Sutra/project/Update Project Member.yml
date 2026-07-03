@@ -1,0 +1,47 @@
+info:
+  name: Update Project Member
+  type: http
+  seq: 8
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/members/{{USER_ID}}"
+  body:
+    type: json
+    data: |-
+      {
+        "role": "{{PROJECT_MEMBER_ROLE}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Update Project Member
+
+  Updates an existing project member's project-level role.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `userId`: Required valid MongoDB ObjectId identifying the project member.
+
+  ### Request Body
+
+  - `role`: Required string containing the member's new project-level role. Allowed values are `project_admin` and `member`.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and project admins can update project-member roles.
+
+  ### Notes
+
+  The target user must already be a member of the specified project.

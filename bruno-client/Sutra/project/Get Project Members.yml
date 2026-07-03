@@ -1,0 +1,36 @@
+info:
+  name: Get Project Members
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/members"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Get Project Members
+
+  Returns all users who are members of the specified project, including their project-level roles.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators, project admins, and members of the specified project can view the project's member list.
+
+  ### Request Body
+
+  No request body is required.
