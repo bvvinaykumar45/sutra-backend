@@ -1,0 +1,58 @@
+info:
+  name: Update Task
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}"
+  body:
+    type: json
+    data: |-
+      {
+        "status": "in_progress"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Update Task
+
+  Partially updates an existing task within the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the task.
+
+  ### Request Body
+
+  At least one of the following fields must be provided:
+
+  - `title`: Optional string containing the updated task title.
+  - `description`: Optional string containing the updated task description.
+  - `assignedTo`: Optional valid MongoDB ObjectId identifying the project member to whom the task should be assigned.
+  - `status`: Optional task status. Allowed values are `todo`, `in_progress`, and `done`.
+
+  Fields other than `title`, `description`, `assignedTo`, and `status` are not accepted.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can update any task within the project.
+  - The task creator can update the task, including its assignment.
+  - The assigned user can update the task but cannot reassign it.
+
+  ### Notes
+
+  This endpoint uses `PATCH`, so fields omitted from the request body remain unchanged.
+
+  If `assignedTo` is provided, the selected user must already be a member of the specified project.

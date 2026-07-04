@@ -1,0 +1,41 @@
+info:
+  name: Get Task By Id
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Get Task By ID
+
+  Returns the details of a specific task belonging to the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the task.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and members of the specified project can view the task.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Notes
+
+  The requested task must belong to the project identified by `projectId`.

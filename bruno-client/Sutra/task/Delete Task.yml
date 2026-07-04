@@ -1,0 +1,45 @@
+info:
+  name: Delete Task
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Delete Task
+
+  Deletes an existing task from the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the task.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can delete any task within the project.
+  - A project member can delete a task only if they created it.
+  - The assigned user cannot delete the task unless they are also its creator.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Warning
+
+  This is a destructive operation and cannot be undone.
+
+  Task deletion should also clean up related subtasks, attachment metadata, and locally stored attachment files. Verify that dependent-resource cleanup is implemented before considering this endpoint production-ready.

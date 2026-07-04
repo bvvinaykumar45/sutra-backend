@@ -1,0 +1,42 @@
+info:
+  name: Create Task
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "{{TASK_TITLE}}",
+        "description": "{{TASK_DESCRIPTION}}",
+        "assignedTo": "{{USER_ID}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Create Task
+
+  Creates a new task within the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Request Body
+
+  - `title`: Required non-empty string containing the task title.
+  - `description`: Required non-empty string containing the task description.
+  - `assignedTo`: Optional valid MongoDB ObjectId identifying the project member assigned to the task.
+
+  Only `title`, `description`, and `assignedTo` are accepted in the request body.
+
+  ### Authentication

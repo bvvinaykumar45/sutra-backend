@@ -36,3 +36,9 @@ variables:
     value: ""
   - name: USER_ID
     value: ""
+  - name: TASK_TITLE
+    value: ""
+  - name: TASK_DESCRIPTION
+    value: ""
+  - name: TASK_ID
+    value: ""
