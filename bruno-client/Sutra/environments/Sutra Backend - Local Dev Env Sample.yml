@@ -42,3 +42,5 @@ variables:
     value: ""
   - name: TASK_ID
     value: ""
+  - name: ATTACHMENT_ID
+    value: ""

@@ -1,0 +1,52 @@
+info:
+  name: Fetch Attachment
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/attachments/{{ATTACHMENT_ID}}"
+  params:
+    - name: mode
+      value: download
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Fetch Task Attachment
+
+  Retrieves an attachment belonging to a task for preview or download.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the task.
+  - `attachmentId`: Required valid MongoDB ObjectId identifying the attachment.
+
+  ### Query Parameters
+
+  - `mode`: Required string controlling how the attachment is served. Allowed values:
+    - `preview`: Serves the attachment inline when the file type is supported by the client.
+    - `download`: Serves the attachment as a downloadable file.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and members of the specified project can preview or download the attachment.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Notes
+
+  Browser preview support depends on the attachment's MIME type and the capabilities of the client. Files such as JPEG, PNG, and PDF are generally suitable for inline preview.

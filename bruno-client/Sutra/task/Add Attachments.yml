@@ -1,0 +1,61 @@
+info:
+  name: Add Attachments
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/attachments"
+  body:
+    type: multipart-form
+    data:
+      - name: attachments
+        type: file
+        value: []
+        contentType: image/jpeg
+      - name: attachments
+        type: file
+        value: []
+        contentType: image/jpeg
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Add Task Attachments
+
+  Uploads one or more files to an existing task.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the task.
+
+  ### Multipart Form Data
+
+  - `attachments`: Required file field. The same field name may be repeated to upload multiple files.
+
+  ### File Restrictions
+
+  - A maximum of 3 files can be uploaded in one request.
+  - Each file must not exceed 5 MB.
+  - Supported file types are JPEG, PNG, and PDF.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can upload attachments.
+  - Project members can upload attachments when they are the task creator or assignee.
+
+  ### Notes
+
+  Select the files locally in Bruno before sending the request.
+
+  Do not commit absolute local file paths because they are machine-specific and may expose local filesystem information.

@@ -1,0 +1,43 @@
+info:
+  name: Delete Attachment
+  type: http
+  seq: 8
+
+http:
+  method: DELETE
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/attachments/{{ATTACHMENT_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Delete Task Attachment
+
+  Deletes an attachment from an existing task and removes its associated file from local storage.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the task.
+  - `attachmentId`: Required valid MongoDB ObjectId identifying the attachment.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can delete task attachments.
+  - Project members can delete attachments when they are the task creator or assignee.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Warning
+
+  This is a destructive operation. It removes both the attachment metadata from the task and the corresponding locally stored file.
