@@ -1,0 +1,41 @@
+info:
+  name: Get Project Note By Id
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/notes/{{NOTE_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Get Project Note By ID
+
+  Returns the details of a specific note belonging to the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `noteId`: Required valid MongoDB ObjectId identifying the project note.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and members of the specified project can view the note.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Notes
+
+  The requested note must belong to the project identified by `projectId`.

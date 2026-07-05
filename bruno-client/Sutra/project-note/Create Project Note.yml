@@ -1,0 +1,48 @@
+info:
+  name: Create Project Note
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/notes"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "{{NOTE_TITLE}}",
+        "content": "{{NOTE_CONTENT}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Create Project Note
+
+  Creates a new note within the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+
+  ### Request Body
+
+  - `title`: Required non-empty string containing the note title.
+  - `content`: Required non-empty string containing the note content.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators, project admins, and project members can create notes within projects they can access.
+
+  ### Notes
+
+  The authenticated user is stored as the note creator.

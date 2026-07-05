@@ -48,3 +48,7 @@ variables:
     value: ""
   - name: SUB_TASK_DESCRIPTION
     value: ""
+  - name: NOTE_TITLE
+    value: ""
+  - name: NOTE_CONTENT
+    value: ""

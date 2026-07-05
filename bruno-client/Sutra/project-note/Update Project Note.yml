@@ -1,0 +1,56 @@
+info:
+  name: Update Project Note
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/notes/{{NOTE_ID}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "{{NOTE_TITLE}}",
+        "content": "{{NOTE_CONTENT}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Update Project Note
+
+  Partially updates an existing note within the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `noteId`: Required valid MongoDB ObjectId identifying the project note.
+
+  ### Request Body
+
+  At least one of the following fields must be provided:
+
+  - `title`: Optional string containing the updated note title.
+  - `content`: Optional string containing the updated note content.
+
+  Fields other than `title` and `content` are not accepted.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can update project notes.
+  - Project members can update a note only when they are its creator.
+
+  ### Notes
+
+  This endpoint uses `PATCH`, so fields omitted from the request body remain unchanged.
+
+  When testing a single-field update, remove the other property from the request body rather than passing an empty value.

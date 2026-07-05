@@ -1,0 +1,44 @@
+info:
+  name: Delete Project Note
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/notes/{{NOTE_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Delete Project Note
+
+  Deletes an existing note from the specified project.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `noteId`: Required valid MongoDB ObjectId identifying the project note.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can delete project notes.
+  - Project members can delete a note only when they are its creator.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Warning
+
+  This is a destructive operation and cannot be undone.
+
+  The requested note must belong to the project identified by `projectId`.
