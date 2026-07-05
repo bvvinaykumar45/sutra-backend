@@ -1,0 +1,42 @@
+info:
+  name: Get Sub Task By Id
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/sub-tasks/{{SUB_TASK_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Get Subtask By ID
+
+  Returns the details of a specific subtask belonging to the specified task.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the parent task.
+  - `subTaskId`: Required valid MongoDB ObjectId identifying the subtask.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  System administrators and members of the specified project can view the subtask.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Notes
+
+  The parent task must belong to the specified project, and the subtask must belong to the specified task.

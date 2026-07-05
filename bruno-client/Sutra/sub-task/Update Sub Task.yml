@@ -1,0 +1,57 @@
+info:
+  name: Update Sub Task
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/sub-tasks/{{SUB_TASK_ID}}"
+  body:
+    type: json
+    data: |-
+      {
+        "isCompleted": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Update Subtask
+
+  Partially updates an existing subtask.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the parent task.
+  - `subTaskId`: Required valid MongoDB ObjectId identifying the subtask.
+
+  ### Request Body
+
+  At least one of the following fields must be provided:
+
+  - `title`: Optional string containing the updated subtask title.
+  - `description`: Optional string containing the updated subtask description.
+  - `isCompleted`: Optional boolean indicating whether the subtask is complete.
+
+  Fields other than `title`, `description`, and `isCompleted` are not accepted.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can update subtasks.
+  - Project members can update subtasks when they are the parent task's creator or assignee.
+
+  ### Notes
+
+  This endpoint uses `PATCH`, so fields omitted from the request body remain unchanged.
+
+  The saved request demonstrates updating the subtask's completion state.

@@ -44,3 +44,7 @@ variables:
     value: ""
   - name: ATTACHMENT_ID
     value: ""
+  - name: SUB_TASK_TITLE
+    value: ""
+  - name: SUB_TASK_DESCRIPTION
+    value: ""

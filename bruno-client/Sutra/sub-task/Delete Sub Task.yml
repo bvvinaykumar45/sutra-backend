@@ -1,0 +1,45 @@
+info:
+  name: Delete Sub Task
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/sub-tasks/{{SUB_TASK_ID}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Delete Subtask
+
+  Deletes an existing subtask from its parent task.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the parent task.
+  - `subTaskId`: Required valid MongoDB ObjectId identifying the subtask.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can delete subtasks.
+  - Project members can delete subtasks when they are the parent task's creator or assignee.
+
+  ### Request Body
+
+  No request body is required.
+
+  ### Warning
+
+  This is a destructive operation and cannot be undone.
+
+  The parent task must belong to the specified project, and the subtask must belong to the specified task.

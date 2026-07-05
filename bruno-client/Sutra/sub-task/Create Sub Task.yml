@@ -1,0 +1,52 @@
+info:
+  name: Create Sub Task
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/v1/projects/{{PROJECT_ID}}/tasks/{{TASK_ID}}/sub-tasks"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "{{SUB_TASK_TITLE}}",
+        "description": "{{SUB_TASK_DESCRIPTION}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  ## Create Subtask
+
+  Creates a new subtask under an existing task.
+
+  ### Path Parameters
+
+  - `projectId`: Required valid MongoDB ObjectId identifying the project.
+  - `taskId`: Required valid MongoDB ObjectId identifying the parent task.
+
+  ### Request Body
+
+  - `title`: Required non-empty string containing the subtask title.
+  - `description`: Optional string containing the subtask description.
+
+  ### Authentication
+
+  Required. The request uses the authenticated user's inherited authorization configuration.
+
+  ### Authorization
+
+  - System administrators and project admins can create subtasks.
+  - Project members can create subtasks when they are the parent task's creator or assignee.
+
+  ### Notes
+
+  The parent task must belong to the project identified by `projectId`.
+
+  To create a subtask without a description, remove the `description` property from the request body.
